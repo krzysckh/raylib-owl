@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <raylib.h>
 
 #include "ovm.h"
+
+#define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 
 word
 prim_custom(int op, word a, word b, word c)
@@ -75,6 +78,62 @@ prim_custom(int op, word a, word b, word c)
   case 127:
     SetClipboardText((char*)a+W);
     return ITRUE;
+  case 128:
+    ShowCursor();
+    return ITRUE;
+  case 129:
+    HideCursor();
+    return ITRUE;
+  case 130:
+    return IsCursorHidden() ? ITRUE : IFALSE;
+  case 131:
+    EnableCursor();
+    return ITRUE;
+  case 132:
+    DisableCursor();
+    return ITRUE;
+  case 133:
+    return IsCursorOnScreen() ? ITRUE : IFALSE;
+  case 134: { /* make-color (r g b a) → color */
+    int c[4], i;
+    for (i = 0; i < 4; ++i)
+      c[i] = cnum(G(a, 1)), a = G(a, 2);
+
+    return mkint((uint32_t)(c[3]<<24)|(c[2]<<16)|(c[1]<<8)|c[0]);
+  }
+  case 135:
+    ClearBackground(v2color(a));
+    return ITRUE;
+  case 136:
+    BeginDrawing();
+    return ITRUE;
+  case 137:
+    EndDrawing();
+    return ITRUE;
+    /* TODO: i have no clue how floats work */
+  case 138: { /* make-camera2d (offset-x . offset-y) (targ-x . targ-y) (rot . zoom) */
+    Camera2D *cd = malloc(sizeof(Camera2D));
+    cd->offset = (Vector2){ cnum(a), cnum(a+W) };
+    cd->target = (Vector2){ cnum(b), cnum(b+W) };
+    cd->rotation = cnum(c);
+    cd->zoom = cnum(c+W);
+    return onum((uint64_t)cd, 0);
+  }
+  case 139:
+    BeginMode2D(*(Camera2D*)cnum(a));
+    return ITRUE;
+  case 140:
+    EndMode2D();
+    return ITRUE;
+  case 141:
+  case 142:
+  case 143:
+  case 144:
+  case 145:
+  case 146:
+    fprintf(stderr, "not-implemented %d", op);
+    abort();
+    return IFALSE;
   default:
     return IFALSE;
   }

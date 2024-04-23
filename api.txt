@@ -30,22 +30,29 @@
 * [x] const char *GetClipboardText(void)
 * [x] void SetClipboardText(const char *text)
 
+128+
 // Cursor-related functions
-* [ ] void ShowCursor(void)
-* [ ] void HideCursor(void)
-* [ ] bool IsCursorHidden(void)
-* [ ] void EnableCursor(void)
-* [ ] void DisableCursor(void)
-* [ ] bool IsCursorOnScreen(void)
+* [x] void ShowCursor(void)
+* [x] void HideCursor(void)
+* [x] bool IsCursorHidden(void)
+* [x] void EnableCursor(void)
+* [x] void DisableCursor(void)
+* [x] bool IsCursorOnScreen(void)
 
+* [x] make-color
+
+135+
 // Drawing-related functions
-* [ ] void ClearBackground(Color color)
-* [ ] void BeginDrawing(void)
-* [ ] void EndDrawing(void)
-* [ ] void BeginMode2D(Camera2D camera)
-* [ ] void EndMode2D(void)
+* [x] void ClearBackground(Color color)
+* [x] void BeginDrawing(void)
+* [x] void EndDrawing(void)
+* [x] make-camera2d
+* [x] void BeginMode2D(Camera2D camera)
+* [x] void EndMode2D(void)
+* [ ] make-camera3d
 * [ ] void BeginMode3D(Camera3D camera)
 * [ ] void EndMode3D(void)
+* [ ] make-rendertexture2d
 * [ ] void BeginTextureMode(RenderTexture2D target)
 * [ ] void EndTextureMode(void)
 

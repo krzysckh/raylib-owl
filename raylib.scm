@@ -5,8 +5,10 @@
 
   (export
    draw
+   with-window
 
    init-window
+   window-should-close?
    close-window
    window-ready?
    window-minimized?
@@ -35,6 +37,20 @@
    monitor-name
    clipboard
    set-clipboard!
+
+   show-cursor!
+   hide-cursor!
+   cursor-hidden?
+   enable-cursor!
+   disable-cursor!
+   cursor-on-screen?
+   make-color
+   clear-background
+   begin-drawing
+   end-drawing
+   make-camera2d
+   begin-mode2d
+   end-mode2d
    )
 
   (begin
@@ -46,14 +62,6 @@
          ((= L 2) (sys-prim n (car vs) (cadr vs) #f))
          (else
           (sys-prim n (car vs) (cadr vs) (caddr vs))))))
-
-    (define-syntax draw
-      (syntax-rules ()
-        ((draw exp1 ...)
-         (begin
-           (begin-drawing)
-           exp1 ...
-           (end-drawing)))))
 
     (define (init-window width height title)
       (prim 100 width height (c-string title)))
@@ -145,5 +153,66 @@
 
     (define (set-clipboard! text)
       (prim 127 text))
+
+    (define (show-cursor!)
+      (prim 128))
+
+    (define (hide-cursor!)
+      (prim 129))
+
+    (define (cursor-hidden?)
+      (prim 130))
+
+    (define (enable-cursor!)
+      (prim 131))
+
+    (define (disable-cursor!)
+      (prim 132))
+
+    (define (cursor-on-screen?)
+      (prim 133))
+
+    (define (make-color r g b a)
+      (prim 134 (list r g b a)))
+
+    (define (clear-background color)
+      (if (list? color)
+          (prim 135 (apply make-color color))
+          (prim 135 color)))
+
+    (define (begin-drawing)
+      (prim 136))
+
+    (define (end-drawing)
+      (prim 137))
+
+    (define (make-camera2d offset target rot zoom)
+      (prim 138 offset target (cons rot zoom)))
+
+    (define (begin-mode2d cam)
+      (prim 139 cam))
+
+    (define (end-mode2d)
+      (prim 140))
+
+    (define-syntax draw
+      (syntax-rules ()
+        ((draw exp1 ...)
+         (begin
+           (begin-drawing)
+           exp1 ...
+           (end-drawing)))))
+
+    ;; while !window-should-close do
+    (define-syntax with-window
+      (syntax-rules ()
+        ((with-window e ...)
+         (let loop ()
+           (if (window-should-close?)
+               0
+               (begin
+                 e ...
+                 (loop)))))))
+
 
     ))
