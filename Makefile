@@ -6,6 +6,7 @@ test: test.c raylib.c
 	clang $(CFLAGS) $(LDFLAGS) raylib.c test.c -lraylib -lm -o test
 test.c: test.scm ol-rl
 	./ol-rl -C $(OWL_SOURCE_PATH)/c/ovm.c -x c -o test.c test.scm
+test.scm: raylib.scm raylib/*.scm
 ol.c: makeol
 	./makeol $(OWL_SOURCE_PATH)/fasl/ol.fasl | cat - $(OWL_SOURCE_PATH)/c/ovm.c > ol.c
 makeol: makeol.c
