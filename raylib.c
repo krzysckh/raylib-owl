@@ -25,16 +25,11 @@ prim_custom(int op, word a, word b, word c)
   case 102:
     CloseWindow();
     return ITRUE;
-  case 103:
-    return IsWindowReady() ? ITRUE : IFALSE;
-  case 104:
-    return IsWindowMinimized() ? ITRUE : IFALSE;
-  case 105:
-    return IsWindowMaximized() ? ITRUE : IFALSE;
-  case 106:
-    return IsWindowResized() ? ITRUE : IFALSE;
-  case 107:
-    return IsWindowState(cnum(a)) ? ITRUE : IFALSE;
+  case 103: return BOOL(IsWindowReady());
+  case 104: return BOOL(IsWindowMinimized());
+  case 105: return BOOL(IsWindowMaximized());
+  case 106: return BOOL(IsWindowResized());
+  case 107: return BOOL(IsWindowState(cnum(a)));
   case 108:
     SetWindowState(cnum(a));
     return ITRUE;
@@ -62,26 +57,16 @@ prim_custom(int op, word a, word b, word c)
   case 116:
     SetWindowSize(cnum(a), cnum(b));
     return ITRUE;
-  case 117:
-    return mkint((uint64_t)GetWindowHandle());
-  case 118:
-    return mkint(GetScreenWidth());
-  case 119:
-    return mkint(GetScreenHeight());
-  case 120:
-    return mkint(GetMonitorCount());
-  case 121:
-    return mkint(GetMonitorWidth(cnum(a)));
-  case 122:
-    return mkint(GetMonitorHeight(cnum(a)));
-  case 123:
-    return mkint(GetMonitorPhysicalWidth(cnum(a)));
-  case 124:
-    return mkint(GetMonitorPhysicalHeight(cnum(a)));
-  case 125:
-    return mkstring((char*)GetMonitorName(cnum(a)));
-  case 126:
-    return mkstring((char*)GetClipboardText());
+  case 117: return mkint((uint64_t)GetWindowHandle());
+  case 118: return mkint(GetScreenWidth());
+  case 119: return mkint(GetScreenHeight());
+  case 120: return mkint(GetMonitorCount());
+  case 121: return mkint(GetMonitorWidth(cnum(a)));
+  case 122: return mkint(GetMonitorHeight(cnum(a)));
+  case 123: return mkint(GetMonitorPhysicalWidth(cnum(a)));
+  case 124: return mkint(GetMonitorPhysicalHeight(cnum(a)));
+  case 125: return mkstring((char*)GetMonitorName(cnum(a)));
+  case 126: return mkstring((char*)GetClipboardText());
   case 127:
     SetClipboardText((char*)a+W);
     return ITRUE;
@@ -91,16 +76,14 @@ prim_custom(int op, word a, word b, word c)
   case 129:
     HideCursor();
     return ITRUE;
-  case 130:
-    return IsCursorHidden() ? ITRUE : IFALSE;
+  case 130: return BOOL(IsCursorHidden());
   case 131:
     EnableCursor();
     return ITRUE;
   case 132:
     DisableCursor();
     return ITRUE;
-  case 133:
-    return IsCursorOnScreen() ? ITRUE : IFALSE;
+  case 133: return BOOL(IsCursorOnScreen());
   case 134: { /* make-color (r g b a) → color */
     int c[4], i;
     for (i = 0; i < 4; ++i)
@@ -145,12 +128,9 @@ prim_custom(int op, word a, word b, word c)
   case 150:
     SetTargetFPS(cnum(a));
     return ITRUE;
-  case 151:
-    return mkint(GetFPS());
-  case 152:
-    return mkfloat(GetFrameTime());
-  case 153:
-    return mkfloat(GetTime());
+  case 151: return mkint(GetFPS());
+  case 152: return mkfloat(GetFrameTime());
+  case 153: return mkfloat(GetTime());
   case 154: {
     Vector4 c = ColorNormalize(v2color(cnum(a)));
     return cons(mkfloat(c.x),
@@ -214,6 +194,50 @@ prim_custom(int op, word a, word b, word c)
   case 178: return onum(GetGamepadAxisCount(cnum(a)), 1);
   case 179: return mkfloat(GetGamepadAxisMovement(cnum(a), cnum(b)));
 
+  case 180: return BOOL(IsMouseButtonPressed(cnum(a)));
+  case 181: return BOOL(IsMouseButtonDown(cnum(a)));
+  case 182: return BOOL(IsMouseButtonReleased(cnum(a)));
+  case 183: return BOOL(IsMouseButtonUp(cnum(a)));
+  case 184: return mkint(GetMouseX());
+  case 185: return mkint(GetMouseY());
+  case 186: {
+    Vector2 pos = GetMousePosition();
+    return cons(mkint(pos.x), mkint(pos.y));
+  }
+  case 187:
+    SetMousePosition(cnum(a), cnum(b));
+    return ITRUE;
+  case 188:
+    SetMouseOffset(cnum(a), cnum(b));
+    return ITRUE;
+  case 189:
+    SetMouseScale(cfloat(a), cfloat(b));
+    return ITRUE;
+  case 190: return mkfloat(GetMouseWheelMove());
+  case 191: return mkint(GetTouchX());
+  case 192: return mkint(GetTouchY());
+  case 193: {
+    Vector2 pos = GetTouchPosition(cnum(a));
+    return cons(mkint(pos.x), mkint(pos.y));
+  }
+
+  case 194:
+    SetGesturesEnabled(cnum(a));
+    return ITRUE;
+  case 195: return BOOL(IsGestureDetected(cnum(a)));
+  case 196: return mkint(GetGestureDetected());
+  case 197: return mkint(GetTouchPointCount());
+  case 198: return mkfloat(GetGestureHoldDuration());
+  case 199: {
+    Vector2 dv = GetGestureDragVector();
+    return cons(mkfloat(dv.x), mkfloat(dv.y));
+  }
+  case 200: return mkfloat(GetGestureDragAngle());
+  case 201: {
+    Vector2 pv = GetGesturePinchVector();
+    return cons(mkfloat(pv.x), mkfloat(pv.y));
+  }
+  case 202: return mkfloat(GetGesturePinchAngle());
 
   default:
     return IFALSE;

@@ -114,36 +114,38 @@
 * [x] int GetGamepadAxisCount(int gamepad)
 * [x] float GetGamepadAxisMovement(int gamepad, int axis)
 
+180+
 ## Input-related functions: mouse
-* [ ] bool IsMouseButtonPressed(int button)
-* [ ] bool IsMouseButtonDown(int button)
-* [ ] bool IsMouseButtonReleased(int button)
-* [ ] bool IsMouseButtonUp(int button)
-* [ ] int GetMouseX(void)
-* [ ] int GetMouseY(void)
-* [ ] Vector2 GetMousePosition(void)
-* [ ] void SetMousePosition(int x, int y)
-* [ ] void SetMouseOffset(int offsetX, int offsetY)
-* [ ] void SetMouseScale(float scaleX, float scaleY)
-* [ ] float GetMouseWheelMove(void)
+* [x] bool IsMouseButtonPressed(int button)
+* [x] bool IsMouseButtonDown(int button)
+* [x] bool IsMouseButtonReleased(int button)
+* [x] bool IsMouseButtonUp(int button)
+* [x] int GetMouseX(void)
+* [x] int GetMouseY(void)
+* [x] Vector2 GetMousePosition(void)
+* [x] void SetMousePosition(int x, int y)
+* [x] void SetMouseOffset(int offsetX, int offsetY)
+* [x] void SetMouseScale(float scaleX, float scaleY)
+* [x] float GetMouseWheelMove(void)
 
+191+
 ## Input-related functions: touch
-* [ ] int GetTouchX(void)
-* [ ] int GetTouchY(void)
-* [ ] Vector2 GetTouchPosition(int index)
+* [x] int GetTouchX(void)
+* [x] int GetTouchY(void)
+* [x] Vector2 GetTouchPosition(int index)
 
 
 ## Gestures and Touch Handling Functions (Module: gestures)
-
-* [ ] void SetGesturesEnabled(unsigned int gestureFlags)
-* [ ] bool IsGestureDetected(int gesture)
-* [ ] int GetGestureDetected(void)
-* [ ] int GetTouchPointsCount(void)
-* [ ] float GetGestureHoldDuration(void)
-* [ ] Vector2 GetGestureDragVector(void)
-* [ ] float GetGestureDragAngle(void)
-* [ ] Vector2 GetGesturePinchVector(void)
-* [ ] float GetGesturePinchAngle(void)
+194+
+* [x] void SetGesturesEnabled(unsigned int gestureFlags)
+* [x] bool IsGestureDetected(int gesture)
+* [x] int GetGestureDetected(void)
+* [x] int GetTouchPointsCount(void)
+* [x] float GetGestureHoldDuration(void)
+* [x] Vector2 GetGestureDragVector(void)
+* [x] float GetGestureDragAngle(void)
+* [x] Vector2 GetGesturePinchVector(void)
+* [x] float GetGesturePinchAngle(void)
 
 
 ## Camera System Functions (Module: camera)
