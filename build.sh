@@ -12,7 +12,8 @@ if [ `uname -s` = "OpenBSD" ]; then
 fi
 
 build_unix() {
-  ol -x c -o test.c test.scm
+  set -xe
+  ol -C "$OWL_SOURCE_PATH/c/ovm.c" -x c -o test.c test.scm
   clang $CFLAGS $LDFLAGS raylib.c test.c -lraylib -lm -o test
 }
 

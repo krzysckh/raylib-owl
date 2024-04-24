@@ -1,10 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <raylib.h>
+#include <sys/types.h>
 
 #include "ovm.h"
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
+
+#define not_implemented(f) \
+  fprintf(stderr, "not-implemented %s (opcode %d)\n", #f, op);   \
+  abort(); \
+  return IFALSE;
+
+#define cfloat(x) ((float)cnum(x)/(float)cnum(x+W))
 
 word
 prim_custom(int op, word a, word b, word c)
@@ -131,9 +139,52 @@ prim_custom(int op, word a, word b, word c)
   case 144:
   case 145:
   case 146:
-    fprintf(stderr, "not-implemented %d", op);
-    abort();
-    return IFALSE;
+  case 147:
+  case 148:
+  case 149:
+    not_implemented("lol");
+  case 150:
+    SetTargetFPS(cnum(a));
+    return ITRUE;
+  case 151:
+    return mkint(GetFPS());
+  case 152:
+    return mkfloat(GetFrameTime());
+  case 153:
+    return mkfloat(GetTime());
+  case 154: {
+    Vector4 c = ColorNormalize(v2color(cnum(a)));
+    return cons(mkfloat(c.x),
+                cons(mkfloat(c.y),
+                     cons(mkfloat(c.z),
+                          cons(mkfloat(c.w), INULL))));
+  }
+  case 155: {
+    Vector3 h = ColorToHSV(v2color(cnum(a)));
+    return cons(mkfloat(h.x),
+                cons(mkfloat(h.y),
+                     cons(mkfloat(h.z), INULL)));
+  }
+  case 156:
+    not_implemented(ColorFromHSV);
+  case 157: {
+    Color cl = Fade(v2color(cnum(a)), cfloat(b));
+    return mkint(*(uint32_t*)&cl);
+  }
+  case 158:
+    SetConfigFlags(cnum(a));
+    return ITRUE;
+  case 159:
+    SetTraceLogLevel(cnum(a));
+    return ITRUE;
+  case 160: /* TODO: callback */
+    not_implemented(SetTraceLogCallback);
+  case 161: /* TODO: variadic or just lisp-side string-append */
+    not_implemented(TraceLog);
+  case 162:
+    TakeScreenshot(cstr(a));
+    return ITRUE;
+
   default:
     return IFALSE;
   }

@@ -1,7 +1,8 @@
 (define-library (raylib)
   (import
    (owl toplevel)
-   (owl string))
+   (owl string)
+   (owl core))
 
   (export
    draw
@@ -51,6 +52,21 @@
    make-camera2d
    begin-mode2d
    end-mode2d
+
+   set-target-fps!
+   fps
+   frame-time
+   time
+
+   color-normalize
+   color->hsv
+   color->number ;; self
+   fade
+
+   set-config-flags!
+   set-tracelog-level!
+   take-screenshot!
+
    )
 
   (begin
@@ -194,6 +210,39 @@
 
     (define (end-mode2d)
       (prim 140))
+
+    (define (set-target-fps! fps)
+      (prim 150 fps))
+
+    (define (fps)
+      (prim 151))
+
+    (define (frame-time)
+      (prim 152))
+
+    (define (time)
+      (prim 153))
+
+    (define (color-normalize c)
+      (prim 154 c))
+
+    (define (color->hsv c)
+      (prim 155 c))
+
+    (define (fade c alpha)
+      (prim 157 c alpha))
+
+    (define (set-config-flags! f)
+      (prim 158))
+
+    (define (set-tracelog-level! l)
+      (prim 159))
+
+    (define (take-screenshot! path)
+      (prim 162 path))
+
+
+    (define color->number I)
 
     (define-syntax draw
       (syntax-rules ()

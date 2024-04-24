@@ -62,25 +62,25 @@
 * [ ] Matrix GetCameraMatrix(Camera camera)
 
 // Timing-related functions
-* [ ] void SetTargetFPS(int fps)
-* [ ] int GetFPS(void)
-* [ ] float GetFrameTime(void)
-* [ ] double GetTime(void)
+* [x] void SetTargetFPS(int fps)
+* [x] int GetFPS(void)
+* [x] float GetFrameTime(void)
+* [x] double GetTime(void)
 
+154+
 // Color-related functions
-* [ ] int ColorToInt(Color color)
-* [ ] Vector4 ColorNormalize(Color color)
-* [ ] Vector3 ColorToHSV(Color color)
+* [x] Vector4 ColorNormalize(Color color)
+* [x] Vector3 ColorToHSV(Color color)
 * [ ] Color ColorFromHSV(Vector3 hsv)
-* [ ] Color GetColor(int hexValue)
-* [ ] Color Fade(Color color, float alpha)
+* [x] Color Fade(Color color, float alpha)
 
+158+
 // Misc. functions
-* [ ] void SetConfigFlags(unsigned int flags)
-* [ ] void SetTraceLogLevel(int logType)
+* [x] void SetConfigFlags(unsigned int flags)
+* [x] void SetTraceLogLevel(int logType)
 * [ ] void SetTraceLogCallback(TraceLogCallback callback)
 * [ ] void TraceLog(int logType, const char *text, ...)
-* [ ] void TakeScreenshot(const char *fileName)
+* [x] void TakeScreenshot(const char *fileName)
 
 // Files management functions
 * [ ] char **GetDroppedFiles(int *count)
