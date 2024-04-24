@@ -1,6 +1,6 @@
 -*- mode: markdown -*- 
 
-// Window-related functions
+## Window-related functions
 * [x] void InitWindow(int width, int height, const char *title)
 * [x] bool WindowShouldClose(void)
 * [x] void CloseWindow(void)
@@ -31,7 +31,7 @@
 * [x] void SetClipboardText(const char *text)
 
 128+
-// Cursor-related functions
+## Cursor-related functions
 * [x] void ShowCursor(void)
 * [x] void HideCursor(void)
 * [x] bool IsCursorHidden(void)
@@ -42,7 +42,7 @@
 * [x] make-color
 
 135+
-// Drawing-related functions
+## Drawing-related functions
 * [x] void ClearBackground(Color color)
 * [x] void BeginDrawing(void)
 * [x] void EndDrawing(void)
@@ -56,67 +56,65 @@
 * [ ] void BeginTextureMode(RenderTexture2D target)
 * [ ] void EndTextureMode(void)
 
-// Screen-space-related functions
+## Screen-space-related functions
 * [ ] Ray GetMouseRay(Vector2 mousePosition, Camera camera)
 * [ ] Vector2 GetWorldToScreen(Vector3 position, Camera camera)
 * [ ] Matrix GetCameraMatrix(Camera camera)
 
-// Timing-related functions
+## Timing-related functions
 * [x] void SetTargetFPS(int fps)
 * [x] int GetFPS(void)
 * [x] float GetFrameTime(void)
 * [x] double GetTime(void)
 
 154+
-// Color-related functions
+## Color-related functions
 * [x] Vector4 ColorNormalize(Color color)
 * [x] Vector3 ColorToHSV(Color color)
 * [ ] Color ColorFromHSV(Vector3 hsv)
 * [x] Color Fade(Color color, float alpha)
 
 158+
-// Misc. functions
+## Misc. functions
 * [x] void SetConfigFlags(unsigned int flags)
 * [x] void SetTraceLogLevel(int logType)
 * [ ] void SetTraceLogCallback(TraceLogCallback callback)
 * [ ] void TraceLog(int logType, const char *text, ...)
 * [x] void TakeScreenshot(const char *fileName)
 
-// Files management functions
-* [ ] char **GetDroppedFiles(int *count)
-* [ ] void ClearDroppedFiles(void)
+163+
+## Files management functions
+* [x] FilePathList LoadDroppedFiles()
+* [x] void UnloadDroppedFiles(void)
 
-// Persistent storage management
-* [ ] void SaveStorageValue(int position, int value)
-* [ ] int LoadStorageValue(int position)
+* [x] void OpenURL(const char *url)
 
-* [ ] void OpenURL(const char *url)
 
-//------------------------------------------------------------------------------------
-// Input Handling Functions
-//------------------------------------------------------------------------------------
+# Input Handling Functions
 
-// Input-related functions: keyboard
-* [ ] bool IsKeyPressed(int key)
-* [ ] bool IsKeyDown(int key)
-* [ ] bool IsKeyReleased(int key)
-* [ ] bool IsKeyUp(int key)
-* [ ] int GetKeyPressed(void)
-* [ ] void SetExitKey(int key)
 
-// Input-related functions: gamepads
-* [ ] bool IsGamepadAvailable(int gamepad)
-* [ ] bool IsGamepadName(int gamepad, const char *name)
-* [ ] const char *GetGamepadName(int gamepad)
-* [ ] bool IsGamepadButtonPressed(int gamepad, int button)
-* [ ] bool IsGamepadButtonDown(int gamepad, int button)
-* [ ] bool IsGamepadButtonReleased(int gamepad, int button)
-* [ ] bool IsGamepadButtonUp(int gamepad, int button)
-* [ ] int GetGamepadButtonPressed(void)
-* [ ] int GetGamepadAxisCount(int gamepad)
-* [ ] float GetGamepadAxisMovement(int gamepad, int axis)
+165+
+## Input-related functions: keyboard
+* [x] bool IsKeyPressed(int key)
+* [x] bool IsKeyDown(int key)
+* [x] bool IsKeyReleased(int key)
+* [x] bool IsKeyUp(int key)
+* [x] int GetKeyPressed(void)
+* [x] void SetExitKey(int key)
 
-// Input-related functions: mouse
+171+
+## Input-related functions: gamepads
+* [x] bool IsGamepadAvailable(int gamepad)
+* [x] const char *GetGamepadName(int gamepad)
+* [x] bool IsGamepadButtonPressed(int gamepad, int button)
+* [x] bool IsGamepadButtonDown(int gamepad, int button)
+* [x] bool IsGamepadButtonReleased(int gamepad, int button)
+* [x] bool IsGamepadButtonUp(int gamepad, int button)
+* [x] int GetGamepadButtonPressed(void)
+* [x] int GetGamepadAxisCount(int gamepad)
+* [x] float GetGamepadAxisMovement(int gamepad, int axis)
+
+## Input-related functions: mouse
 * [ ] bool IsMouseButtonPressed(int button)
 * [ ] bool IsMouseButtonDown(int button)
 * [ ] bool IsMouseButtonReleased(int button)
@@ -129,14 +127,14 @@
 * [ ] void SetMouseScale(float scaleX, float scaleY)
 * [ ] float GetMouseWheelMove(void)
 
-// Input-related functions: touch
+## Input-related functions: touch
 * [ ] int GetTouchX(void)
 * [ ] int GetTouchY(void)
 * [ ] Vector2 GetTouchPosition(int index)
 
-//------------------------------------------------------------------------------------
-// Gestures and Touch Handling Functions (Module: gestures)
-//------------------------------------------------------------------------------------
+
+## Gestures and Touch Handling Functions (Module: gestures)
+
 * [ ] void SetGesturesEnabled(unsigned int gestureFlags)
 * [ ] bool IsGestureDetected(int gesture)
 * [ ] int GetGestureDetected(void)
@@ -147,9 +145,9 @@
 * [ ] Vector2 GetGesturePinchVector(void)
 * [ ] float GetGesturePinchAngle(void)
 
-//------------------------------------------------------------------------------------
-// Camera System Functions (Module: camera)
-//------------------------------------------------------------------------------------
+
+## Camera System Functions (Module: camera)
+
 * [ ] void SetCameraMode(Camera camera, int mode)
 * [ ] void UpdateCamera(Camera *camera)
 * [ ] void SetCameraPanControl(int panKey)
@@ -159,7 +157,7 @@
                             int rightKey, int leftKey,
                             int upKey, int downKey)
 
-// Basic shapes drawing functions
+## Basic shapes drawing functions
 * [ ] void DrawPixel(int posX, int posY, Color color)
 * [ ] void DrawPixelV(Vector2 position, Color color)
 * [ ] void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color)
@@ -194,7 +192,7 @@
 
 * [ ] void SetShapesTexture(Texture2D texture, Rectangle source)
 
-// Basic shapes collision detection functions
+## Basic shapes collision detection functions
 * [ ] bool CheckCollisionRecs(Rectangle rec1, Rectangle rec2)
 * [ ] bool CheckCollisionCircles(Vector2 center1, float radius1, Vector2 center2, float radius2)
 * [ ] bool CheckCollisionCircleRec(Vector2 center, float radius, Rectangle rec)
@@ -203,7 +201,7 @@
 * [ ] bool CheckCollisionPointCircle(Vector2 point, Vector2 center, float radius)
 * [ ] bool CheckCollisionPointTriangle(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3)
 
-// Image/Texture2D data loading/unloading/saving functions
+## Image/Texture2D data loading/unloading/saving functions
 * [ ] Image LoadImage(const char *fileName)
 * [ ] Image LoadImagePro(void *data, int width, int height, int format)
 * [ ] Image LoadImageRaw(const char *fileName, int width, int height, int format, int headerSize)
@@ -223,7 +221,7 @@
 * [ ] Image GetScreenData(void)
 * [ ] void UpdateTexture(Texture2D texture, const void *pixels)
 
-// Image manipulation functions
+## Image manipulation functions
 * [ ] Image ImageCopy(Image image)
 * [ ] void ImageToPOT(Image *image, Color fillColor)
 * [ ] void ImageFormat(Image *image, int newFormat)
@@ -256,7 +254,7 @@
 * [ ] void ImageColorBrightness(Image *image, int brightness)
 * [ ] void ImageColorReplace(Image *image, Color color, Color replace)
 
-// Image generation functions
+## Image generation functions
 * [ ] Image GenImageColor(int width, int height, Color color)
 * [ ] Image GenImageGradientLinear(int width, int height, int direction, Color start, Color end)
 * [ ] Image GenImageGradientRadial(int width, int height, float density, Color inner, Color outer)
@@ -266,12 +264,12 @@
 * [ ] Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float scale)
 * [ ] Image GenImageCellular(int width, int height, int tileSize)
 
-// Texture2D configuration functions
+## Texture2D configuration functions
 * [ ] void GenTextureMipmaps(Texture2D *texture)
 * [ ] void SetTextureFilter(Texture2D texture, int filterMode)
 * [ ] void SetTextureWrap(Texture2D texture, int wrapMode)
 
-// Texture2D drawing functions
+## Texture2D drawing functions
 * [ ] void DrawTexture(Texture2D texture, int posX, int posY, Color tint)
 * [ ] void DrawTextureV(Texture2D texture, Vector2 position, Color tint)
 * [ ] void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint)
@@ -280,7 +278,7 @@
 * [ ] void DrawTexturePro(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Vector2 origin, float rotation, Color tint)
 * [ ] void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle destRec, Vector2 origin, float rotation, Color tint)
 
-// Font loading/unloading functions
+## Font loading/unloading functions
 * [ ] Font GetFontDefault(void)
 * [ ] Font LoadFont(const char *fileName)
 * [ ] Font LoadFontEx(const char *fileName, int fontSize, int *fontChars, int charsCount)
@@ -289,7 +287,7 @@
 * [ ] Image GenImageFontAtlas(CharInfo *chars, int charsCount, int fontSize, int padding, int packMethod)
 * [ ] void UnloadFont(Font font)
 
-// Text drawing functions
+## Text drawing functions
 * [ ] void DrawFPS(int posX, int posY)
 * [ ] void DrawText(const char *text, int posX, int posY, int fontSize, Color color)
 * [ ] void DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint)
@@ -297,12 +295,12 @@
 * [ ] void DrawTextRecEx(Font font, const char *text, Rectangle rec, float fontSize, float spacing, bool wordWrap, Color tint,
                       int selectStart, int selectLength, Color selectText, Color selectBack)
 
-// Text misc. functions
+## Text misc. functions
 * [ ] int MeasureText(const char *text, int fontSize)
 * [ ] Vector2 MeasureTextEx(Font font, const char *text, float fontSize, float spacing)
 * [ ] int GetGlyphIndex(Font font, int character)
 
-// Basic geometric 3D shapes drawing functions
+## Basic geometric 3D shapes drawing functions
 * [ ] void DrawLine3D(Vector3 startPos, Vector3 endPos, Color color)
 * [ ] void DrawCircle3D(Vector3 center, float radius, Vector3 rotationAxis, float rotationAngle, Color color)
 * [ ] void DrawTriangle3D(Vector3 v1, Vector3 v2, Vector3 v3, Color color)
@@ -323,34 +321,34 @@
 * [ ] void DrawRay(Ray ray, Color color)
 * [ ] void DrawGrid(int slices, float spacing)
 
-// Model loading/unloading functions
+## Model loading/unloading functions
 * [ ] Model LoadModel(const char *fileName)
 * [ ] Model LoadModelFromMesh(Mesh mesh)
 * [ ] void UnloadModel(Model model)
 * [ ] BoundingBox GetModelBoundingBox(Model model)
 
-// Mesh loading/unloading functions
+## Mesh loading/unloading functions
 * [ ] void ExportMesh(Mesh mesh, const char *fileName)
 * [ ] void UploadMesh(Mesh *mesh, bool dynamic)
 * [ ] void UnloadMesh(Mesh *mesh)
 * [ ] void DrawMesh(Mesh mesh, Material material, Matrix transform)
 * [ ] void DrawMeshInstanced(Mesh mesh, Material material, const Matrix *transforms, int instances)
 
-// Material loading/unloading functions
+## Material loading/unloading functions
 * [ ] Material *LoadMaterials(const char *fileName, int *materialCount)
 * [ ] Material LoadMaterialDefault(void)
 * [ ] void UnloadMaterial(Material material)
 * [ ] void SetMaterialTexture(Material *material, int mapType, Texture2D texture)
 * [ ] void SetModelMeshMaterial(Model *model, int meshId, int materialId)
 
-// Model animations loading/unloading functions
+## Model animations loading/unloading functions
 * [ ] ModelAnimation *LoadModelAnimations(const char *fileName, int *animsCount)
 * [ ] void UpdateModelAnimation(Model model, ModelAnimation anim, int frame)
 * [ ] void UnloadModelAnimation(ModelAnimation anim)
 * [ ] void UnloadModelAnimations(ModelAnimation *animations, unsigned int count)
 * [ ] bool IsModelAnimationValid(Model model, ModelAnimation anim)
 
-// Mesh generation functions
+## Mesh generation functions
 * [ ] Mesh GenMeshPoly(int sides, float radius)
 * [ ] Mesh GenMeshPlane(float width, float length, int resX, int resZ)
 * [ ] Mesh GenMeshCube(float width, float height, float length)
@@ -362,12 +360,12 @@
 * [ ] Mesh GenMeshHeightmap(Image heightmap, Vector3 size)
 * [ ] Mesh GenMeshCubicmap(Image cubicmap, Vector3 cubeSize)
 
-// Mesh manipulation functions
+## Mesh manipulation functions
 * [ ] BoundingBox GetMeshBoundingBox(Mesh mesh)
 * [ ] void GenMeshTangents(Mesh *mesh)
 * [ ] void GenMeshBinormals(Mesh *mesh)
 
-// Model drawing functions
+## Model drawing functions
 * [ ] void DrawModel(Model model, Vector3 position, float scale, Color tint)
 * [ ] void DrawModelEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
 * [ ] void DrawModelWires(Model model, Vector3 position, float scale, Color tint)
@@ -377,7 +375,7 @@
 * [ ] void DrawBillboardRec(Camera camera, Texture2D texture, Rectangle sourceRec, Vector3 center, float size, Color tint)
 * [ ] void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector3 up, Vector2 size, Vector2 origin, float rotation, Color tint)
 
-// Collision detection functions
+## Collision detection functions
 * [ ] bool CheckCollisionSpheres(Vector3 centerA, float radiusA, Vector3 centerB, float radiusB)
 * [ ] bool CheckCollisionBoxes(BoundingBox box1, BoundingBox box2)
 * [ ] bool CheckCollisionBoxSphere(BoundingBox box, Vector3 centerSphere, float radiusSphere)
@@ -388,7 +386,7 @@
 * [ ] RayCollision GetRayCollisionModel(Ray ray, Model *model)
 * [ ] RayCollision GetRayCollisionQuad(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
 
-// Shader loading/unloading functions
+## Shader loading/unloading functions
 * [ ] char *LoadText(const char *fileName)
 * [ ] Shader LoadShader(const char *vsFileName, const char *fsFileName)
 * [ ] Shader LoadShaderCode(char *vsCode, char *fsCode)
@@ -397,7 +395,7 @@
 * [ ] Shader GetShaderDefault(void)
 * [ ] Texture2D GetTextureDefault(void)
 
-// Shader configuration functions
+## Shader configuration functions
 * [ ] int GetShaderLocation(Shader shader, const char *uniformName)
 * [ ] void SetShaderValue(Shader shader, int uniformLoc, const void *value, int uniformType)
 * [ ] void SetShaderValueV(Shader shader, int uniformLoc, const void *value, int uniformType, int count)
@@ -407,7 +405,7 @@
 * [ ] void SetMatrixModelview(Matrix view)
 * [ ] Matrix GetMatrixModelview()
 
-// Shading begin/end functions
+## Shading begin/end functions
 * [ ] void BeginShaderMode(Shader shader)
 * [ ] void EndShaderMode(void)
 * [ ] void BeginBlendMode(int mode)
@@ -415,7 +413,7 @@
 * [ ] void BeginScissorMode(int x, int y, int width, int height)
 * [ ] void EndScissorMode(void)
 
-// VR control functions
+## VR control functions
 * [ ] void InitVrSimulator(void)
 * [ ] void CloseVrSimulator(void)
 * [ ] void UpdateVrTracking(Camera *camera)
@@ -425,13 +423,13 @@
 * [ ] void BeginVrDrawing(void)
 * [ ] void EndVrDrawing(void)
 
-// Audio device management functions
+## Audio device management functions
 * [ ] void InitAudioDevice(void)
 * [ ] void CloseAudioDevice(void)
 * [ ] bool IsAudioDeviceReady(void)
 * [ ] void SetMasterVolume(float volume)
 
-// Wave/Sound loading/unloading functions
+## Wave/Sound loading/unloading functions
 * [ ] Wave LoadWave(const char *fileName)
 * [ ] Wave LoadWaveEx(void *data, int sampleCount, int sampleRate, int sampleSize, int channels)
 * [ ] Sound LoadSound(const char *fileName)
@@ -442,7 +440,7 @@
 * [ ] void ExportWave(Wave wave, const char *fileName)
 * [ ] void ExportWaveAsCode(Wave wave, const char *fileName)
 
-// Wave/Sound management functions
+## Wave/Sound management functions
 * [ ] void PlaySound(Sound sound)
 * [ ] void PauseSound(Sound sound)
 * [ ] void ResumeSound(Sound sound)
@@ -455,7 +453,7 @@
 * [ ] void WaveCrop(Wave *wave, int initSample, int finalSample)
 * [ ] float *GetWaveData(Wave wave)
 
-// Music management functions
+## Music management functions
 * [ ] Music LoadMusicStream(const char *fileName)
 * [ ] void UnloadMusicStream(Music music)
 * [ ] void PlayMusicStream(Music music)
@@ -469,7 +467,7 @@
 * [ ] float GetMusicTimeLength(Music music)
 * [ ] float GetMusicTimePlayed(Music music)
 
-// AudioStream management functions
+## AudioStream management functions
 * [ ] AudioStream InitAudioStream(unsigned int sampleRate, unsigned int sampleSize, unsigned int channels)
 * [ ] void UpdateAudioStream(AudioStream stream, const void *data, int samplesCount)
 * [ ] void CloseAudioStream(AudioStream stream)

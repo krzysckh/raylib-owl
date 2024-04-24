@@ -1,3 +1,10 @@
 raylib bindings for owl lisp (using custom sys primops)
 
 api.txt imported from janet-lang/jaylib
+
+TODOS:
+  * [ ] ol-rl
+    * [x] works
+    * [ ] embed (raylib) into ol-rl
+    * [ ] embed the raylib runtime into ol-rl
+    * [ ] compile ol-rl without owl sources on the os

@@ -67,6 +67,26 @@
    set-tracelog-level!
    take-screenshot!
 
+   dropped-files
+   open-url
+
+   key-pressed?
+   key-down?
+   key-released?
+   key-up?
+   key-pressed
+   set-exit-key!
+
+   gamepad-available?
+   gamepad-name
+   gamepad-button-pressed?
+   gamepad-button-down?
+   gamepad-button-released?
+   gamepad-button-up?
+   gamepad-button-pressed
+   gamepad-axis-count
+   gamepad-axis-movement
+
    )
 
   (begin
@@ -226,6 +246,8 @@
     (define (color-normalize c)
       (prim 154 c))
 
+    (define color->number I)
+
     (define (color->hsv c)
       (prim 155 c))
 
@@ -241,8 +263,29 @@
     (define (take-screenshot! path)
       (prim 162 path))
 
+    (define (dropped-files)
+      (prim 163))
 
-    (define color->number I)
+    (define (open-url url)
+      (prim 164 url))
+
+    (define (key-pressed? k)  (prim 165 k))
+    (define (key-down? k)     (prim 166 k))
+    (define (key-released? k) (prim 167 k))
+    (define (key-up? k)       (prim 168 k))
+    (define (key-pressed)     (prim 169))
+    (define (set-exit-key! k) (prim 170 k))
+
+    (define (gamepad-available? n)         (prim 171 n))
+    (define (gamepad-name n)               (prim 172 n))
+    (define (gamepad-button-pressed? n)    (prim 173 n))
+    (define (gamepad-button-down? n)       (prim 174 n))
+    (define (gamepad-button-released? n)   (prim 175 n))
+    (define (gamepad-button-up? n)         (prim 176 n))
+    (define (gamepad-button-pressed)       (prim 177))
+    (define (gamepad-axis-count n)         (prim 178 n))
+    (define (gamepad-axis-movement n axis) (prim 178 n axis))
+
 
     (define-syntax draw
       (syntax-rules ()

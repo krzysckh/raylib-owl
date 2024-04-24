@@ -13,8 +13,15 @@ fi
 
 build_unix() {
   set -xe
-  ol -C "$OWL_SOURCE_PATH/c/ovm.c" -x c -o test.c test.scm
+  ol -x c -o test.c test.scm
   clang $CFLAGS $LDFLAGS raylib.c test.c -lraylib -lm -o test
 }
 
+make_ol() {
+  clang makeol.c -o makeol
+  ./makeol $OWL_SOURCE_PATH/fasl/ol.fasl | cat - $OWL_SOURCE_PATH/c/ovm.c > ol.c
+  clang $CFLAGS ol.c raylib.c -lraylib -lm -o ol-rl
+}
+
 build_unix
+# make_ol

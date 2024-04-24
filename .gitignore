@@ -1,3 +1,6 @@
 *.~undo-tree~
 test
 test.c
+makeol
+ol-rl
+ol.c

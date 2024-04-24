@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <raylib.h>
-#include <sys/types.h>
 
 #include "ovm.h"
 
@@ -184,6 +183,37 @@ prim_custom(int op, word a, word b, word c)
   case 162:
     TakeScreenshot(cstr(a));
     return ITRUE;
+  case 163: {
+    FilePathList fpl = LoadDroppedFiles();
+    word lst = INULL;
+    uint i;
+    for (i = 0; i < fpl.count; ++i)
+      lst = cons(mkstring(fpl.paths[i]), lst);
+
+    UnloadDroppedFiles(fpl);
+    return lst;
+  }
+  case 164:
+    OpenURL(cstr(a));
+    return ITRUE;
+  case 165: return BOOL(IsKeyPressed(cnum(a)));
+  case 166: return BOOL(IsKeyDown(cnum(a)));
+  case 167: return BOOL(IsKeyReleased(cnum(a)));
+  case 168: return BOOL(IsKeyUp(cnum(a)));
+  case 169: return mkint(GetKeyPressed());
+  case 170:
+    SetExitKey(cnum(a));
+    return ITRUE;
+  case 171: return BOOL(IsGamepadAvailable(cnum(a)));
+  case 172: return mkstring((char*)GetGamepadName(cnum(a)));
+  case 173: return BOOL(IsGamepadButtonPressed(cnum(a), cnum(b)));
+  case 174: return BOOL(IsGamepadButtonDown(cnum(a), cnum(b)));
+  case 175: return BOOL(IsGamepadButtonReleased(cnum(a), cnum(b)));
+  case 176: return BOOL(IsGamepadButtonUp(cnum(a), cnum(b)));
+  case 177: return onum(GetGamepadButtonPressed(), 1);
+  case 178: return onum(GetGamepadAxisCount(cnum(a)), 1);
+  case 179: return mkfloat(GetGamepadAxisMovement(cnum(a), cnum(b)));
+
 
   default:
     return IFALSE;
