@@ -116,7 +116,7 @@
     (define (enable-cursor!)                   (prim 131))
     (define (disable-cursor!)                  (prim 132))
     (define (cursor-on-screen?)                (prim 133))
-    (define (make-color r g b a)               (prim 134 (tuple r g b a)))
+    (define (make-color r g b a)               (prim 134 (list r g b a)))
 
     (define (clear-background color)
       (if (list? color)

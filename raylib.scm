@@ -25,23 +25,24 @@
 
   (begin
     ;; this sucks
+    ;; TODO: check if still needed
     (define (ensure-rational f)
       (read (number->string f)))
 
     (define (vec2 a b)
-      (tuple (ensure-rational a)
-             (ensure-rational b)))
+      (list (ensure-rational a)
+            (ensure-rational b)))
 
     (define (vec3 a b c)
-      (tuple (ensure-rational a)
-             (ensure-rational b)
-             (ensure-rational c)))
+      (list (ensure-rational a)
+            (ensure-rational b)
+            (ensure-rational c)))
 
     (define (vec4 a b c d)
-      (tuple (ensure-rational a)
-             (ensure-rational b)
-             (ensure-rational c)
-             (ensure-rational d)))
+      (list (ensure-rational a)
+            (ensure-rational b)
+            (ensure-rational c)
+            (ensure-rational d)))
 
     (define rectangle vec4)
     (define rect vec4)

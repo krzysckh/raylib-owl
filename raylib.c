@@ -4,23 +4,36 @@
 
 #include "ovm.h"
 
-#define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum((x)+W)):cnum((x)))
+/* #define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum((x)+W)):cnum((x))) */
+/* TODO: this does not work */
+#define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum(x)):cnum((x)+W))
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}
-#define tup2vec2(t) ((Vector2){cfloat(G(t, 1)), cfloat(G(t, 2))})
-#define tup2vec tup2vec2
-#define tup2vec3(t) ((Vector3){cfloat(G(t, 1)), cfloat(G(t, 2)), cfloat(G(t, 3))})
+#define list2vec2(t) ((Vector2){cfloat(list_at(t, 0)), cfloat(list_at(t, 1))})
+#define list2vec3(t) ((Vector3){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), cfloat(list_at(t, 2))})
+#define list2vec list2vec2
 #define vec2 Vector2
 #define vec3 Vector3
 #define vec vec2
+#define gg(a, b) list_at(a, b-1)
 
-#define tup2rect(t) ((Rectangle){cfloat(G(t, 1)), cfloat(G(t, 2)), cfloat(G(t, 3)), cfloat(G(t, 4))})
+#define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
+                                  cfloat(list_at(t, 2)), cfloat(list_at(t, 3))})
 
 #define not_implemented(f) \
   fprintf(stderr, "not-implemented %s (opcode %d)\n", #f, op);   \
   abort(); \
   return IFALSE;
+
+/* i hope the god forsaken compiler optimizes this to a loop */
+word
+list_at(word l, int n)
+{
+  if (n == 0)
+    return G(l, 1);
+  return list_at(G(l, 2), n-1);
+}
 
 word
 prim_custom(int op, word a, word b, word c)
@@ -94,7 +107,8 @@ prim_custom(int op, word a, word b, word c)
     return ITRUE;
   case 133: return BOOL(IsCursorOnScreen());
   case 134: { /* make-color (r g b a) → color */
-    short R = cnum(G(a, 1)), G = cnum(G(a, 2)), B = cnum(G(a, 3)), A = cnum(G(a, 4));
+    short R = cnum(list_at(a, 0)), G = cnum(list_at(a, 1)),
+      B = cnum(list_at(a, 2)), A = cnum(list_at(a, 3));
     return mkint((uint32_t)(A<<24)|(B<<16)|(G<<8)|R);
   }
   case 135:
@@ -253,70 +267,83 @@ prim_custom(int op, word a, word b, word c)
   case 208:
     not_implemented("camera stuff");
   case 209: VOID(DrawPixel(cnum(a), cnum(b), v2color(c)));
-  case 210: VOID(DrawPixelV(tup2vec2(a), v2color(b)));
-  case 211: VOID(DrawLineV(tup2vec2(a), tup2vec(b), v2color(c)));
-  case 212: VOID(DrawLineEx(tup2vec2(a), tup2vec(b),
-                            cfloat(G(c, 1)), v2color(G(c, 2)))); /* #[x y] #[x y] #[thick color] */
-  case 213: VOID(DrawLineBezier(tup2vec2(a), tup2vec(b),
-                                cfloat(G(c, 1)), v2color(G(c, 2))));
+  case 210: VOID(DrawPixelV(list2vec2(a), v2color(b)));
+  case 211: VOID(DrawLineV(list2vec2(a), list2vec(b), v2color(c)));
+  case 212: VOID(DrawLineEx(list2vec2(a), list2vec(b),
+                            cfloat(gg(c, 1)), v2color(gg(c, 2)))); /* #[x y] #[x y] #[thick color] */
+  case 213: VOID(DrawLineBezier(list2vec2(a), list2vec(b),
+                                cfloat(gg(c, 1)), v2color(gg(c, 2))));
   case 214: { /* (pts) N color */
     int i, N = cnum(b);
     vec pts[N];
     for (i = 0; i < N; ++i)
-      pts[i] = tup2vec(G(a, i+1));
+      pts[i] = list2vec(gg(a, i+1));
     VOID(DrawLineStrip(pts, N, v2color(c)));
   }
   case 215: /* pos #[radius startang end-ang segments] color */
-    VOID(DrawCircleSector(tup2vec(a), cfloat(G(b, 1)), cnum(G(b, 2)), cnum(G(b, 3)), cnum(G(b, 4)), v2color(c)));
-  case 216: VOID(DrawCircleSectorLines(tup2vec(a), cfloat(G(b, 1)), cnum(G(b, 2)), cnum(G(b, 3)), cnum(G(b, 4)), v2color(c)));
+    VOID(DrawCircleSector(list2vec(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), cnum(gg(b, 3)), cnum(gg(b, 4)), v2color(c)));
+  case 216: VOID(DrawCircleSectorLines(list2vec(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), cnum(gg(b, 3)), cnum(gg(b, 4)), v2color(c)));
   case 217: { /* pos radius #[col1 col2] */
-    vec pos = tup2vec(a);
-    VOID(DrawCircleGradient(pos.x, pos.y, cfloat(b), v2color(G(c, 1)), v2color(G(c, 2))));
+    vec pos = list2vec(a);
+    VOID(DrawCircleGradient(pos.x, pos.y, cfloat(b), v2color(gg(c, 1)), v2color(gg(c, 2))));
   }
-  case 218: VOID(DrawCircleV(tup2vec(a), cfloat(b), v2color(c)));
+  case 218: VOID(DrawCircleV(list2vec(a), cfloat(b), v2color(c)));
   case 219: {
-    vec pos = tup2vec(a);
+    vec pos = list2vec(a);
     VOID(DrawCircleLines(pos.x, pos.y, cfloat(b), v2color(c)));
   }
   case 220: /* center #[inner outer] #[start-ang end-ang segs color] */
-    VOID(DrawRing(tup2vec(a), cfloat(G(b, 1)), cfloat(G(b, 2)), cnum(G(c, 1)), cnum(G(c, 2)), cnum(G(c, 3)), v2color(G(c, 4))));
-  case 221: VOID(DrawRingLines(tup2vec(a), cfloat(G(b, 1)), cfloat(G(b, 2)), cnum(G(c, 1)), cnum(G(c, 2)), cnum(G(c, 3)), v2color(G(c, 4))));
-  case 222: VOID(DrawRectangleV(tup2vec(a), tup2vec(b), v2color(c)));
-  case 223: VOID(DrawRectangleRec(tup2rect(a), v2color(b)));
+    VOID(DrawRing(list2vec(a), cfloat(gg(b, 1)), cfloat(gg(b, 2)), cnum(gg(c, 1)), cnum(gg(c, 2)), cnum(gg(c, 3)), v2color(gg(c, 4))));
+  case 221: VOID(DrawRingLines(list2vec(a), cfloat(gg(b, 1)), cfloat(gg(b, 2)), cnum(gg(c, 1)), cnum(gg(c, 2)), cnum(gg(c, 3)), v2color(gg(c, 4))));
+  case 222: VOID(DrawRectangleV(list2vec(a), list2vec(b), v2color(c)));
+  case 223: VOID(DrawRectangleRec(list2rect(a), v2color(b)));
   case 224: /* rec or #[rot color] */
-    VOID(DrawRectanglePro(tup2rect(a), tup2vec2(b), cfloat(G(c, 1)), v2color(G(c, 2))));
+    VOID(DrawRectanglePro(list2rect(a), list2vec2(b), cfloat(gg(c, 1)), v2color(gg(c, 2))));
   case 225: { /* vec #[num num] #[col col] */
-    vec pos = tup2vec(a);
-    VOID(DrawRectangleGradientV(pos.x, pos.y, cnum(G(b, 1)), cnum(G(b, 2)), v2color(G(c, 1)), v2color(G(c, 2))));
+    vec pos = list2vec(a);
+    VOID(DrawRectangleGradientV(pos.x, pos.y, cnum(gg(b, 1)), cnum(gg(b, 2)), v2color(gg(c, 1)), v2color(gg(c, 2))));
   }
   case 226: {
-    vec pos = tup2vec(a);
-    VOID(DrawRectangleGradientH(pos.x, pos.y, cnum(G(b, 1)), cnum(G(b, 2)), v2color(G(c, 1)), v2color(G(c, 2))));
+    vec pos = list2vec(a);
+    VOID(DrawRectangleGradientH(pos.x, pos.y, cnum(gg(b, 1)), cnum(gg(b, 2)), v2color(gg(c, 1)), v2color(gg(c, 2))));
   }
-  case 227: VOID(DrawRectangleGradientEx(tup2rect(a), v2color(G(b, 1)), v2color(G(b, 2)), v2color(G(c, 1)), v2color(G(c, 2))));
-  case 228: VOID(DrawRectangleLinesEx(tup2rect(a), cnum(b), v2color(c)));
-  case 229: VOID(DrawRectangleRounded(tup2rect(a), cfloat(G(b, 1)), cnum(G(b, 2)), v2color(c)));
-  case 230: VOID(DrawRectangleRoundedLines(tup2rect(a), cfloat(G(b, 1)), cnum(G(b, 2)), cnum(G(b, 3)), v2color(c)));
-  case 231: VOID(DrawTriangle(tup2vec(G(a, 1)), tup2vec(G(a, 2)), tup2vec(G(a, 3)), v2color(b)));
-  case 232: VOID(DrawTriangleLines(tup2vec(G(a, 1)), tup2vec(G(a, 2)), tup2vec(G(a, 3)), v2color(b)));
+  case 227: VOID(DrawRectangleGradientEx(list2rect(a), v2color(gg(b, 1)), v2color(gg(b, 2)), v2color(gg(c, 1)), v2color(gg(c, 2))));
+  case 228: VOID(DrawRectangleLinesEx(list2rect(a), cnum(b), v2color(c)));
+  case 229: VOID(DrawRectangleRounded(list2rect(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), v2color(c)));
+  case 230: VOID(DrawRectangleRoundedLines(list2rect(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), cnum(gg(b, 3)), v2color(c)));
+  case 231: {
+    vec p1 = list2vec(gg(a, 1));
+    /* printf("fuck: %d\n", is_type(a, )); */
+    /* printf("tuple?: %d, p1: .x = %f, .y = %f\n", is_type(gg(a, 1), TTUPLE), p1.x, p1.y); */
+    /* printf("denominator: %ld\n", cnum(gg(a,1)+W)); */
+    VOID(DrawTriangle(list2vec(gg(a, 1)), list2vec(gg(a, 2)), list2vec(gg(a, 3)), v2color(b)));
+  }
+  case 232: VOID(DrawTriangleLines(list2vec(gg(a, 1)), list2vec(gg(a, 2)), list2vec(gg(a, 3)), v2color(b)));
   case 233: {
     int N = cnum(b), i;
     Vector2 pts[N];
     for (i = 0; i < N; ++i)
-      pts[i] = tup2vec2(G(a, i+1));
+      pts[i] = list2vec2(gg(a, i+1));
     VOID(DrawTriangleFan(pts, N, v2color(c)));
   }
   case 234: {
     int N = cnum(b), i;
     Vector2 pts[N];
     for (i = 0; i < N; ++i)
-      pts[i] = tup2vec2(G(a, i+1));
+      pts[i] = list2vec2(gg(a, i+1));
     VOID(DrawTriangleStrip(pts, N, v2color(c)));
   }
-  case 235: VOID(DrawPoly(tup2vec(a), cnum(G(b, 1)), cfloat(G(b, 2)), cfloat(G(b, 3)), v2color(c)));
+  case 235: VOID(DrawPoly(list2vec(a), cnum(gg(b, 1)), cfloat(gg(b, 2)), cfloat(gg(b, 3)), v2color(c)));
   /* case 236: VOID(SetShapesTexture(Texture2D texture, Rectangle source)); */
 
-  default:
-    return IFALSE;
+  case 300:
+    /* testin' */
+    abort();
+    printf("%s\n", cstr(list_at(a, 0)));
+    printf("%ld\n", cnum(list_at(a, 1)));
+    printf("%f\n", cfloat(list_at(a, 2)));
+    printf("len: %d\n", llen((word*)list_at(a, 3)));
+    break;
   }
+  return IFALSE;
 }
