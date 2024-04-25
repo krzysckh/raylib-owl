@@ -33,6 +33,11 @@
    draw-texture
    draw-texture-pro
    draw-texture-rec
+
+   draw-fps
+   draw-text
+   draw-text-simple
+   measure-text
    )
 
   (begin
@@ -137,5 +142,22 @@
 
     (define (draw-texture-rec t rect pos tint)
       (prim 256 t rect (list pos tint)))
+
+    (define draw-fps
+      (case-lambda
+       ((x y) (prim 264 (list x y)))
+       ((pos) (prim 264 pos))))
+
+    (define (draw-text-simple text pos font-size color)
+      (prim 265 (c-string text) pos (list font-size color)))
+
+    (define (draw-text font text pos f-size spacing color)
+      (prim 266 font (c-string text) (list pos f-size spacing color)))
+
+    (define measure-text
+      (case-lambda
+       ((text font-size) (prim 267 (c-string text) font-size))
+       ((font text font-size spacing) (prim 268 font (c-string text)
+                                            font-size spacing))))
 
     ))

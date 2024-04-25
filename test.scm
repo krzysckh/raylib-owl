@@ -11,13 +11,16 @@
 
 (define triangle-pts '((100 400) (300 500) (500 500)))
 (define image (list->bytevector (file->list "/home/kpm/Documents/img/bjaaarne.png")))
+(define font (list->bytevector (file->list "/home/kpm/.fonts/COMIC.TTF")))
 
 (lambda (args)
   (print "image len: " (bytevector-length image))
+  (print "font len: " (bytevector-length font))
 
   (with-window
    800 600 "hemlo"
-   (let* ((texture (image->texture (list->image ".png" (bytevector->list image)))))
+   (let* ((texture (image->texture (list->image ".png" (bytevector->list image))))
+          (font (list->font (bytevector->list font) ".ttf" 45 0)))
      (with-mainloop
       (draw
        (clear-background bg)
@@ -31,6 +34,8 @@
 
        (let ((c (if (collision-point-triangle? (mouse-pos) triangle-pts) blue white)))
          (draw-triangle triangle-pts c))
+
+       (draw-text font "holy hell is that bjarne soup" '(300 300) 45 1 white)
 
        (draw-circle-gradient
         (mouse-pos)

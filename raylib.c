@@ -34,6 +34,7 @@
 #define cdr(l) G(l, 2)
 #define cadr(l) car(cdr(l))
 #define caddr(l) car(cdr(cdr(l)))
+#define cadddr(l) car(cdr(cdr(cdr(l))))
 
 /* i hope the god forsaken compiler optimizes this to a loop */
 word
@@ -473,6 +474,25 @@ prim_custom(int op, word a, word b, word c)
     *f = LoadFontFromMemory(cstr(a), d, N, cnum(car(c)), NULL, cnum(cadr(c)));
     return PTR(f);
   }
+
+  case 264: {
+    vec pos = list2vec(a);
+    VOID(DrawFPS(pos.x, pos.y));
+  }
+
+  case 265: {
+    vec pos = list2vec(b);
+    VOID(DrawText(cstr(a), pos.x, pos.y, cnum(car(c)), v2color(cadr(c))));
+  }
+  case 266:
+    VOID(DrawTextEx(DEREF(Font, a), cstr(b), list2vec(car(c)), cfloat(cadr(c)),
+                    cfloat(caddr(c)), v2color(cadddr(c))));
+  case 267: return onum(MeasureText(cstr(a), cnum(b)), 1);
+  case 268: {
+    vec s = MeasureTextEx(DEREF(Font, a), cstr(b), cfloat(car(c)), cfloat(cadr(c)));
+    return cons(onum(s.x, 1), onum(s.y, 1));
+  }
+
 
   }
 

@@ -127,10 +127,10 @@
     (define load-font
       (case-lambda
        ((fname) (prim 259 fname))
-       ((fname font-size char-count) (prim 260 fname font-size char-count))))
+       ((fname font-size char-count) (prim 260 (c-string fname) font-size char-count))))
 
-    (define (image->font image key first-char) (prim 260 image key first-char))
-    (define (unload-font f) (prim 261 f))
-    (define (list->font lst type font-size n-chars) (prim 261 (c-string type) lst (list font-size n-chars)))
+    (define (image->font image key first-char) (prim 261 image key first-char))
+    (define (unload-font f) (prim 262 f))
+    (define (list->font lst type font-size n-chars) (prim 263 (c-string type) lst (list font-size n-chars)))
 
     ))
