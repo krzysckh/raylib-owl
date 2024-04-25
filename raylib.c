@@ -17,12 +17,13 @@
 #define vec3 Vector3
 #define vec vec2
 #define gg(a, b) list_at(a, b-1)
-#define PTR(t) onum((uint64_t)t, 0)
-#define cptr(v) ((void*)cnum(v))
+#define PTR(t) onum((intptr_t)t, 0)
+#define cptr(v) ((void*)(intptr_t)cnum(v))
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
                                   cfloat(list_at(t, 2)), cfloat(list_at(t, 3))})
+#define DEREF(T, v) (*(T*)cptr(v))
 
 #define not_implemented(f) \
   fprintf(stderr, "not-implemented %s (opcode %d)\n", #f, op);   \
@@ -97,7 +98,7 @@ prim_custom(int op, word a, word b, word c)
   case 116:
     SetWindowSize(cnum(a), cnum(b));
     return ITRUE;
-  case 117: return onum((uint64_t)GetWindowHandle(), 1);
+  case 117: return onum((intptr_t)GetWindowHandle(), 1);
   case 118: return onum(GetScreenWidth(), 1);
   case 119: return onum(GetScreenHeight(), 1);
   case 120: return onum(GetMonitorCount(), 1);
@@ -398,11 +399,6 @@ prim_custom(int op, word a, word b, word c)
 
   case 248: {
     Texture2D *texture = malloc(sizeof(Texture2D));
-    printf("fuck\n");
-    Image *img = cptr(a);
-    printf("fuck %ld\n", img);
-    Image I = *img;
-    printf("fuck? %d\n", I.width);
     *texture = LoadTextureFromImage(*(Image*)cptr(a));
     return PTR(texture);
   }
@@ -434,13 +430,14 @@ prim_custom(int op, word a, word b, word c)
     return PTR(i);
   }
 
-  case 1025: {
-    Texture2D *t = cptr(a);
-
-    DrawTexture(*t, 10, 10, WHITE);
-    return ITRUE;
-  }
-
+  case 254: VOID(DrawTextureV(DEREF(Texture2D, a), list2vec(b), v2color(c)));
+  case 255: VOID(DrawTextureEx(DEREF(Texture2D, a), list2vec(b),
+                               cfloat(list_at(c, 0)),
+                               cfloat(list_at(c, 1)),
+                               v2color(list_at(c, 2))));
+  case 256: VOID(DrawTextureRec(DEREF(Texture2D, a), list2rect(b), list2vec(car(c)), v2color(cadr(c))));
+  case 257: VOID(DrawTexturePro(DEREF(Texture2D, a), list2rect(car(b)),
+                                list2rect(cadr(b)), list2vec(car(c)), cfloat(cadr(c)), v2color(list_at(c, 2))));
   }
 
   return IFALSE;

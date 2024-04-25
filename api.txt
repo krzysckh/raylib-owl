@@ -215,6 +215,7 @@
 * [x] void UnloadRenderTexture(RenderTexture2D target)
 * [x] Image LoadImageFromScreen(void)
 
+TODO: this
 ## Image manipulation functions
 * [ ] Image ImageCopy(Image image)
 * [ ] void ImageToPOT(Image *image, Color fillColor)
@@ -248,6 +249,7 @@
 * [ ] void ImageColorBrightness(Image *image, int brightness)
 * [ ] void ImageColorReplace(Image *image, Color color, Color replace)
 
+TODO: this
 ## Image generation functions
 * [ ] Image GenImageColor(int width, int height, Color color)
 * [ ] Image GenImageGradientLinear(int width, int height, int direction, Color start, Color end)
@@ -258,19 +260,18 @@
 * [ ] Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float scale)
 * [ ] Image GenImageCellular(int width, int height, int tileSize)
 
+TODO: this
 ## Texture2D configuration functions
 * [ ] void GenTextureMipmaps(Texture2D *texture)
 * [ ] void SetTextureFilter(Texture2D texture, int filterMode)
 * [ ] void SetTextureWrap(Texture2D texture, int wrapMode)
 
+254+
 ## Texture2D drawing functions
-* [ ] void DrawTexture(Texture2D texture, int posX, int posY, Color tint)
-* [ ] void DrawTextureV(Texture2D texture, Vector2 position, Color tint)
-* [ ] void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint)
-* [ ] void DrawTextureRec(Texture2D texture, Rectangle sourceRec, Vector2 position, Color tint)
-* [ ] void DrawTextureQuad(Texture2D texture, Vector2 tiling, Vector2 offset, Rectangle quad, Color tint)
-* [ ] void DrawTexturePro(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Vector2 origin, float rotation, Color tint)
-* [ ] void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle destRec, Vector2 origin, float rotation, Color tint)
+* [x] void DrawTextureV(Texture2D texture, Vector2 position, Color tint)
+* [x] void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint)
+* [x] void DrawTextureRec(Texture2D texture, Rectangle sourceRec, Vector2 position, Color tint)
+* [x] void DrawTexturePro(Texture2D texture, Rectangle sourceRec, Rectangle destRec, Vector2 origin, float rotation, Color tint)
 
 ## Font loading/unloading functions
 * [ ] Font GetFontDefault(void)

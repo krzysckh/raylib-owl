@@ -29,6 +29,10 @@
    draw-triangle-fan
    draw-triangle-strip
    draw-poly
+
+   draw-texture
+   draw-texture-pro
+   draw-texture-rec
    )
 
   (begin
@@ -121,5 +125,17 @@
 
     (define (draw-poly center sides radius rot color)
       (prim (list sides radius rot) color))
+
+    (define draw-texture
+      (case-lambda
+       ((t x y tint) (prim 254 t (list x y) tint))                       ;; DrawTexture
+       ((t pos tint) (prim 254 t pos tint))                              ;; DrawTextureV
+       ((t pos rot scale tint) (prim 255 t pos (list rot scale tint))))) ;; DrawTextureEx
+
+    (define (draw-texture-pro t source-rect dest-rect origin rot tint)
+      (prim 257 t (list source-rect dest-rect) (list origin rot tint)))
+
+    (define (draw-texture-rec t rect pos tint)
+      (prim 256 t rect (list pos tint)))
 
     ))

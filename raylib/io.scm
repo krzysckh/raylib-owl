@@ -106,7 +106,7 @@
     (define (gesture-pinch-angle)          (prim 202))
 
     (define (load-image fname) (prim 244 fname))
-    (define (list->image type data) (prim 245 type data (length data)))
+    (define (list->image type data) (prim 245 (c-string type) data (length data)))
     (define (export-image img fname) (prim 246 img fname))
     (define (load-texture fname) (prim 247 fname))
     (define (image->texture img) (prim 248 img))

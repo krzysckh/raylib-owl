@@ -4,3 +4,10 @@ test.c
 makeol
 ol-rl
 ol.c
+*.exe
+ovm-win.exe
+a.out
+*.a
+ol-win.c
+ovm-win.c
+test-win.c
