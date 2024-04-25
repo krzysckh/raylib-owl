@@ -437,7 +437,43 @@ prim_custom(int op, word a, word b, word c)
                                v2color(list_at(c, 2))));
   case 256: VOID(DrawTextureRec(DEREF(Texture2D, a), list2rect(b), list2vec(car(c)), v2color(cadr(c))));
   case 257: VOID(DrawTexturePro(DEREF(Texture2D, a), list2rect(car(b)),
-                                list2rect(cadr(b)), list2vec(car(c)), cfloat(cadr(c)), v2color(list_at(c, 2))));
+                                list2rect(cadr(b)), list2vec(car(c)), cfloat(cadr(c)),
+                                v2color(list_at(c, 2))));
+  case 258: {
+    Font *f = malloc(sizeof(Font));
+    *f = GetFontDefault();
+    return PTR(f);
+  }
+  case 259: {
+    Font *f = malloc(sizeof(Font));
+    *f = LoadFont(cstr(a));
+    return PTR(f);
+  }
+  case 260: {
+    Font *f = malloc(sizeof(Font));
+    int n;
+    *f = LoadFontEx(cstr(a), cnum(b), &n, cnum(c));
+    return PTR(f);
+  }
+  case 261: {
+    Font *f = malloc(sizeof(Font));
+    *f = LoadFontFromImage(DEREF(Image, a), v2color(b), cnum(c));
+    return PTR(f);
+  }
+  case 262: {
+    UnloadFont(DEREF(Font, a));
+    free(cptr(a));
+    return ITRUE;
+  }
+  case 263: {
+    Font *f = malloc(sizeof(Font));
+    int N = llen((word*)b);
+    unsigned char *d = malloc(N);
+    list2data(b, d, N);
+    *f = LoadFontFromMemory(cstr(a), d, N, cnum(car(c)), NULL, cnum(cadr(c)));
+    return PTR(f);
+  }
+
   }
 
   return IFALSE;

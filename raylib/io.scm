@@ -59,6 +59,12 @@
    unload-texture
    unload-render-texture
    screen->image
+
+   get-font-default
+   load-font
+   image->font
+   unload-font
+   list->font
    )
 
   (begin
@@ -105,14 +111,26 @@
     (define (gesture-pinch-vector)         (prim 201))
     (define (gesture-pinch-angle)          (prim 202))
 
-    (define (load-image fname) (prim 244 fname))
-    (define (list->image type data) (prim 245 (c-string type) data (length data)))
-    (define (export-image img fname) (prim 246 img fname))
-    (define (load-texture fname) (prim 247 fname))
-    (define (image->texture img) (prim 248 img))
-    (define (load-texture-cubemap fname lt) (prim 249 fname lt))
-    (define (unload-image img) (prim 250 img))
-    (define (unload-texture txt) (prim 251 txt))
-    (define (unload-render-texture txt) (prim 252 txt))
-    (define (screen->image) (prim 253))
+    (define (load-image fname)               (prim 244 fname))
+    (define (list->image type data)          (prim 245 (c-string type) data (length data)))
+    (define (export-image img fname)         (prim 246 img fname))
+    (define (load-texture fname)             (prim 247 fname))
+    (define (image->texture img)             (prim 248 img))
+    (define (load-texture-cubemap fname lt)  (prim 249 fname lt))
+    (define (unload-image img)               (prim 250 img))
+    (define (unload-texture txt)             (prim 251 txt))
+    (define (unload-render-texture txt)      (prim 252 txt))
+    (define (screen->image)                  (prim 253))
+
+
+    (define (get-font-default) (prim 258))
+    (define load-font
+      (case-lambda
+       ((fname) (prim 259 fname))
+       ((fname font-size char-count) (prim 260 fname font-size char-count))))
+
+    (define (image->font image key first-char) (prim 260 image key first-char))
+    (define (unload-font f) (prim 261 f))
+    (define (list->font lst type font-size n-chars) (prim 261 (c-string type) lst (list font-size n-chars)))
+
     ))
