@@ -17,6 +17,8 @@
 #define vec3 Vector3
 #define vec vec2
 #define gg(a, b) list_at(a, b-1)
+#define PTR(t) onum((uint64_t)t, 0)
+#define cptr(v) ((void*)cnum(v))
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
@@ -39,6 +41,16 @@ list_at(word l, int n)
   if (n == 0)
     return G(l, 1);
   return list_at(G(l, 2), n-1);
+}
+
+void
+list2data(word l, unsigned char *u, int N)
+{
+  int i;
+  for (i = 0; i < N; ++i) {
+    u[i] = cnum(car(l));
+    l = cdr(l);
+  }
 }
 
 word
@@ -126,14 +138,14 @@ prim_custom(int op, word a, word b, word c)
   case 137:
     EndDrawing();
     return ITRUE;
-    /* TODO: i have no clue how floats work */
   case 138: { /* make-camera2d (offset-x . offset-y) (targ-x . targ-y) (rot . zoom) */
-    Camera2D *cd = malloc(sizeof(Camera2D));
-    cd->offset = (Vector2){ cnum(a), cnum(a+W) };
-    cd->target = (Vector2){ cnum(b), cnum(b+W) };
-    cd->rotation = cnum(c);
-    cd->zoom = cnum(c+W);
-    return onum((uint64_t)cd, 0);
+    not_implemented(Camera2D);
+    /* Camera2D *cd = malloc(sizeof(Camera2D)); */
+    /* cd->offset = (Vector2){ cnum(a), cnum(a+W) }; */
+    /* cd->target = (Vector2){ cnum(b), cnum(b+W) }; */
+    /* cd->rotation = cnum(c); */
+    /* cd->zoom = cnum(c+W); */
+    /* return onum((uint64_t)cd, 0); */
   }
   case 139:
     BeginMode2D(*(Camera2D*)cnum(a));
@@ -361,7 +373,73 @@ prim_custom(int op, word a, word b, word c)
                                                     list2vec(list_ref(b, 0)),
                                                     list2vec(list_ref(b, 1)),
                                                     list2vec(list_ref(b, 2))));
+  case 244: {
+    Image *i = malloc(sizeof(Image));
+    *i = LoadImage(cstr(a));
+    return PTR(i);
+  }
 
+  case 245: {
+    int N = cnum(c);
+    Image *i = malloc(sizeof(Image));
+    unsigned char *d = malloc(N);
+    list2data(b, d, N);
+    *i = LoadImageFromMemory(cstr(a), d, N);
+    free(d);
+    return PTR(i);
+  }
+
+  case 246: VOID(ExportImage(*(Image*)cptr(a), cstr(b)));
+  case 247: {
+    Texture2D *t = malloc(sizeof(Texture2D));
+    *t = LoadTexture(cstr(a));
+    return PTR(t);
+  }
+
+  case 248: {
+    Texture2D *texture = malloc(sizeof(Texture2D));
+    printf("fuck\n");
+    Image *img = cptr(a);
+    printf("fuck %ld\n", img);
+    Image I = *img;
+    printf("fuck? %d\n", I.width);
+    *texture = LoadTextureFromImage(*(Image*)cptr(a));
+    return PTR(texture);
+  }
+
+  case 249: {
+    TextureCubemap *t = malloc(sizeof(TextureCubemap));
+    *t = LoadTextureCubemap(*(Image*)cptr(a), cnum(b));
+    return PTR(t);
+  }
+
+  case 250: {
+    UnloadImage(*(Image*)cptr(a));
+    free(cptr(a));
+  }
+
+  case 251: {
+    UnloadTexture(*(Texture2D*)cptr(a));
+    free(cptr(a));
+  }
+
+  case 252: {
+    UnloadRenderTexture(*(RenderTexture2D*)cptr(a));
+    free(cptr(a));
+  }
+
+  case 253: {
+    Image *i = malloc(sizeof(Image));
+    *i = LoadImageFromScreen();
+    return PTR(i);
+  }
+
+  case 1025: {
+    Texture2D *t = cptr(a);
+
+    DrawTexture(*t, 10, 10, WHITE);
+    return ITRUE;
+  }
 
   }
 

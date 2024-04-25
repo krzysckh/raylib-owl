@@ -1,5 +1,6 @@
 (import
  (owl toplevel)
+ (raylib common)
  (raylib))
 
 
@@ -12,19 +13,23 @@
 (lambda (args)
   (with-window
    800 600 "hemlo"
-   (with-mainloop
-    (draw
-     (clear-background bg)
+   (begin
+     (define image (load-image "/home/kpm/Documents/img/bjaaarne.png"))
+     (define texture (image->texture image))
 
-     (draw-circle-gradient
-      (vec 100.45 200)
-      30
-      (color 255 0 0 255)
-      (color 0 0 255 255))
+     (with-mainloop
+      (draw
+       (clear-background bg)
 
-     (let ((c (if (collision-point-triangle? (mouse-pos) triangle-pts) blue white)))
-       (draw-triangle triangle-pts c))
+       (draw-circle-gradient
+        (vec 100.45 200)
+        30
+        (color 255 0 0 255)
+        (color 0 0 255 255))
 
-     )))
+       (let ((c (if (collision-point-triangle? (mouse-pos) triangle-pts) blue white)))
+         (draw-triangle triangle-pts c))
+       ))
+     ))
 
   0)

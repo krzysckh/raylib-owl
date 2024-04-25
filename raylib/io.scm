@@ -48,6 +48,17 @@
    gesture-drag-angle
    gesture-pinch-vector
    gesture-pinch-angle
+
+   load-image
+   list->image
+   export-image
+   load-texture
+   image->texture
+   load-texture-cubemap
+   unload-image
+   unload-texture
+   unload-render-texture
+   screen->image
    )
 
   (begin
@@ -93,4 +104,15 @@
     (define (gesture-drag-angle)           (prim 200))
     (define (gesture-pinch-vector)         (prim 201))
     (define (gesture-pinch-angle)          (prim 202))
+
+    (define (load-image fname) (prim 244 fname))
+    (define (list->image type data) (prim 245 type data (length data)))
+    (define (export-image img fname) (prim 246 img fname))
+    (define (load-texture fname) (prim 247 fname))
+    (define (image->texture img) (prim 248 img))
+    (define (load-texture-cubemap fname lt) (prim 249 fname lt))
+    (define (unload-image img) (prim 250 img))
+    (define (unload-texture txt) (prim 251 txt))
+    (define (unload-render-texture txt) (prim 252 txt))
+    (define (screen->image) (prim 253))
     ))
