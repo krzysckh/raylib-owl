@@ -1,5 +1,5 @@
 OWL_SOURCE_PATH=/home/kpm/nmojeprogramy/owl
-CFLAGS=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_SOURCE_PATH)/c
+CFLAGS=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_SOURCE_PATH)/c #-fsanitize=address
 LDFLAGS="-L/usr/local/lib"
 
 FEATHER=/tmp/feather

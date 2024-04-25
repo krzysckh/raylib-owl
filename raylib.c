@@ -10,8 +10,8 @@
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}
-#define list2vec2(t) ((Vector2){cfloat(list_at(t, 0)), cfloat(list_at(t, 1))})
-#define list2vec3(t) ((Vector3){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), cfloat(list_at(t, 2))})
+#define list2vec2(t) ((Vector2){cfloat(car(t)), cfloat(cadr(t))})
+#define list2vec3(t) ((Vector3){cfloat(car(t)), cfloat(cadr(t)), cfloat(caddr(t))})
 #define list2vec list2vec2
 #define vec2 Vector2
 #define vec3 Vector3
@@ -306,7 +306,7 @@ prim_custom(int op, word a, word b, word c)
   case 216: VOID(DrawCircleSectorLines(list2vec(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), cnum(gg(b, 3)), cnum(gg(b, 4)), v2color(c)));
   case 217: { /* pos radius #[col1 col2] */
     vec pos = list2vec(a);
-    VOID(DrawCircleGradient(pos.x, pos.y, cfloat(b), v2color(gg(c, 1)), v2color(gg(c, 2))));
+    VOID(DrawCircleGradient(pos.x, pos.y, cfloat(b), v2color(car(c)), v2color(cadr(c))));
   }
   case 218: VOID(DrawCircleV(list2vec(a), cfloat(b), v2color(c)));
   case 219: {
