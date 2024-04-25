@@ -1,31 +1,30 @@
 (import
  (owl toplevel)
- (raylib common)
  (raylib))
 
 
-(define black (color 0 0 0 255))
 (define blue  (color 0 0 255 255))
 (define white (color 255 255 255 255))
 (define bg    #x222222)
 
+(define triangle-pts '((100 400) (300 500) (500 500)))
+
 (lambda (args)
-  (init-window 800 600 "balsak")
-
   (with-window
-   (draw
-    (clear-background bg)
+   800 600 "hemlo"
+   (with-mainloop
+    (draw
+     (clear-background bg)
 
-    (draw-circle-gradient
-     (vec 100.45 200)
-     30
-     (color 255 0 0 255)
-     (color 0 0 255 255))
+     (draw-circle-gradient
+      (vec 100.45 200)
+      30
+      (color 255 0 0 255)
+      (color 0 0 255 255))
 
+     (let ((c (if (collision-point-triangle? (mouse-pos) triangle-pts) blue white)))
+       (draw-triangle triangle-pts c))
 
-    (draw-triangle (vec 100 400) '(300 500) '(500 500) white)
-    ))
-
-  (close-window)
+     )))
 
   0)

@@ -9,11 +9,14 @@
 
    (raylib window)
    (raylib io)
-   (raylib draw))
+   (raylib draw)
+   (raylib util)
+   )
 
   (export
    draw
    with-window
+   with-mainloop
 
    vec vec2 vec3 vec4 make-vector ;; same stuff
    rec rectangle rect ;; same
@@ -21,6 +24,7 @@
    (exports (raylib window))
    (exports (raylib io))
    (exports (raylib draw))
+   (exports (raylib util))
    )
 
   (begin
@@ -65,7 +69,7 @@
            (end-drawing)))))
 
     ;; while !window-should-close do
-    (define-syntax with-window
+    (define-syntax with-mainloop
       (syntax-rules ()
         ((with-window e ...)
          (let loop ()
@@ -74,6 +78,16 @@
                (begin
                  e ...
                  (loop)))))))
+
+    ;; create window. only 1 exp afterwards
+    (define-syntax with-window
+      (syntax-rules ()
+        ((with-window width height title exp1)
+         (begin
+           (init-window width height title)
+           (let ((res exp1))
+             (close-window)
+             res)))))
 
 
     ))

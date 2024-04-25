@@ -18,6 +18,7 @@
 #define vec vec2
 #define gg(a, b) list_at(a, b-1)
 
+#define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
                                   cfloat(list_at(t, 2)), cfloat(list_at(t, 3))})
 
@@ -26,12 +27,12 @@
   abort(); \
   return IFALSE;
 
-/* i hope the god forsaken compiler optimizes this to a loop */
 #define car(l) G(l, 1)
 #define cdr(l) G(l, 2)
 #define cadr(l) car(cdr(l))
 #define caddr(l) car(cdr(cdr(l)))
 
+/* i hope the god forsaken compiler optimizes this to a loop */
 word
 list_at(word l, int n)
 {
@@ -84,14 +85,14 @@ prim_custom(int op, word a, word b, word c)
   case 116:
     SetWindowSize(cnum(a), cnum(b));
     return ITRUE;
-  case 117: return mkint((uint64_t)GetWindowHandle());
-  case 118: return mkint(GetScreenWidth());
-  case 119: return mkint(GetScreenHeight());
-  case 120: return mkint(GetMonitorCount());
-  case 121: return mkint(GetMonitorWidth(cnum(a)));
-  case 122: return mkint(GetMonitorHeight(cnum(a)));
-  case 123: return mkint(GetMonitorPhysicalWidth(cnum(a)));
-  case 124: return mkint(GetMonitorPhysicalHeight(cnum(a)));
+  case 117: return onum((uint64_t)GetWindowHandle(), 1);
+  case 118: return onum(GetScreenWidth(), 1);
+  case 119: return onum(GetScreenHeight(), 1);
+  case 120: return onum(GetMonitorCount(), 1);
+  case 121: return onum(GetMonitorWidth(cnum(a)), 1);
+  case 122: return onum(GetMonitorHeight(cnum(a)), 1);
+  case 123: return onum(GetMonitorPhysicalWidth(cnum(a)), 1);
+  case 124: return onum(GetMonitorPhysicalHeight(cnum(a)), 1);
   case 125: return mkstring((char*)GetMonitorName(cnum(a)));
   case 126: return mkstring((char*)GetClipboardText());
   case 127:
@@ -153,7 +154,7 @@ prim_custom(int op, word a, word b, word c)
   case 150:
     SetTargetFPS(cnum(a));
     return ITRUE;
-  case 151: return mkint(GetFPS());
+  case 151: return onum(GetFPS(), 1);
   case 152: return mkfloat(GetFrameTime());
   case 153: return mkfloat(GetTime());
   case 154: {
@@ -205,7 +206,7 @@ prim_custom(int op, word a, word b, word c)
   case 166: return BOOL(IsKeyDown(cnum(a)));
   case 167: return BOOL(IsKeyReleased(cnum(a)));
   case 168: return BOOL(IsKeyUp(cnum(a)));
-  case 169: return mkint(GetKeyPressed());
+  case 169: return onum(GetKeyPressed(), 1);
   case 170:
     SetExitKey(cnum(a));
     return ITRUE;
@@ -223,11 +224,12 @@ prim_custom(int op, word a, word b, word c)
   case 181: return BOOL(IsMouseButtonDown(cnum(a)));
   case 182: return BOOL(IsMouseButtonReleased(cnum(a)));
   case 183: return BOOL(IsMouseButtonUp(cnum(a)));
-  case 184: return mkint(GetMouseX());
-  case 185: return mkint(GetMouseY());
+  case 184: return onum(GetMouseX(), 1);
+  case 185: return onum(GetMouseY(), 1);
   case 186: {
     vec pos = GetMousePosition();
-    return cons(mkint(pos.x), mkint(pos.y));
+    return cons(mkfloat(pos.x),
+                cons(mkfloat(pos.y), INULL)); /* not a pair, so list2vec can be applied */
   }
   case 187:
     SetMousePosition(cnum(a), cnum(b));
@@ -239,19 +241,19 @@ prim_custom(int op, word a, word b, word c)
     SetMouseScale(cfloat(a), cfloat(b));
     return ITRUE;
   case 190: return mkfloat(GetMouseWheelMove());
-  case 191: return mkint(GetTouchX());
-  case 192: return mkint(GetTouchY());
+  case 191: return onum(GetTouchX(), 1);
+  case 192: return onum(GetTouchY(), 1);
   case 193: {
     vec pos = GetTouchPosition(cnum(a));
-    return cons(mkint(pos.x), mkint(pos.y));
+    return cons(onum(pos.x, 1), onum(pos.y, 1));
   }
 
   case 194:
     SetGesturesEnabled(cnum(a));
     return ITRUE;
   case 195: return BOOL(IsGestureDetected(cnum(a)));
-  case 196: return mkint(GetGestureDetected());
-  case 197: return mkint(GetTouchPointCount());
+  case 196: return onum(GetGestureDetected(), 1);
+  case 197: return onum(GetTouchPointCount(), 1);
   case 198: return mkfloat(GetGestureHoldDuration());
   case 199: {
     vec dv = GetGestureDragVector();
@@ -340,6 +342,27 @@ prim_custom(int op, word a, word b, word c)
   }
   case 235: VOID(DrawPoly(list2vec(a), cnum(gg(b, 1)), cfloat(gg(b, 2)), cfloat(gg(b, 3)), v2color(c)));
   /* case 236: VOID(SetShapesTexture(Texture2D texture, Rectangle source)); */
+
+
+  case 237: return BOOL(CheckCollisionRecs(list2rect(a), list2rect(b)));
+  case 238: return BOOL(CheckCollisionCircles(list2vec(car(a)), cfloat(cadr(a)), list2vec(car(b)), cfloat(cadr(b))));
+  case 239: return BOOL(CheckCollisionCircleRec(list2vec(a), cfloat(b), list2rect(c)));
+  case 240: {
+    Rectangle r = GetCollisionRec(list2rect(a), list2rect(b));
+    return cons(mkfloat(r.x),
+                cons(mkfloat(r.y),
+                     cons(mkfloat(r.width),
+                          cons(mkfloat(r.height), INULL))));
+
+  }
+  case 241: return BOOL(CheckCollisionPointRec(list2vec(a), list2rect(b)));
+  case 242: return BOOL(CheckCollisionPointCircle(list2vec(a), list2vec(b), cfloat(c)));
+  case 243: return BOOL(CheckCollisionPointTriangle(list2vec(a),
+                                                    list2vec(list_ref(b, 0)),
+                                                    list2vec(list_ref(b, 1)),
+                                                    list2vec(list_ref(b, 2))));
+
+
   }
 
   return IFALSE;

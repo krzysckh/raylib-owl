@@ -99,17 +99,25 @@
     (define (draw-rectangle-rounded-lines rect roundness segments color)
       (prim 230 rect (list roundness segments) color))
 
-    (define (draw-triangle p1 p2 p3 color)
-      (prim 231 (list p1 p2 p3) color))
+    (define draw-triangle
+      (case-lambda
+       ((p1 p2 p3 color) (prim 231 (list p1 p2 p3) color))
+       ((l color)        (prim 231 l color))))
 
-    (define (draw-triangle-lines p1 p2 p3 color)
-      (prim 232 (list p1 p2 p3) color))
+    (define draw-triangle-lines
+      (case-lambda
+       ((p1 p2 p3 color) (prim 232 (list p1 p2 p3) color))
+       ((l color)        (prim 232 l color))))
 
-    (define (draw-triangle-fan pts color)
-      (prim 233 pts (length pts) color))
+    (define draw-triangle-fan
+      (case-lambda
+       ((p1 p2 p3 color) (prim 233 (list p1 p2 p3) color))
+       ((l color)        (prim 233 l color))))
 
-    (define (draw-triangle-strip pts color)
-      (prim 234 pts (length pts) color))
+    (define draw-triangle-strip
+      (case-lambda
+       ((p1 p2 p3 color) (prim 234 (list p1 p2 p3) color))
+       ((l color)        (prim 234 l color))))
 
     (define (draw-poly center sides radius rot color)
       (prim (list sides radius rot) color))
