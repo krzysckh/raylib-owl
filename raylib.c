@@ -4,9 +4,9 @@
 
 #include "ovm.h"
 
-/* #define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum((x)+W)):cnum((x))) */
-/* TODO: this does not work */
-#define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum(x)):cnum((x)+W))
+#define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum(x+W)):   \
+                   ((is_type(x,TNUM)?(cnum((x)+W)):                     \
+                     ((float)(cnum(car(x)))/(float)cnum(cdr(x))))))
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}
@@ -27,6 +27,11 @@
   return IFALSE;
 
 /* i hope the god forsaken compiler optimizes this to a loop */
+#define car(l) G(l, 1)
+#define cdr(l) G(l, 2)
+#define cadr(l) car(cdr(l))
+#define caddr(l) car(cdr(cdr(l)))
+
 word
 list_at(word l, int n)
 {
@@ -335,15 +340,7 @@ prim_custom(int op, word a, word b, word c)
   }
   case 235: VOID(DrawPoly(list2vec(a), cnum(gg(b, 1)), cfloat(gg(b, 2)), cfloat(gg(b, 3)), v2color(c)));
   /* case 236: VOID(SetShapesTexture(Texture2D texture, Rectangle source)); */
-
-  case 300:
-    /* testin' */
-    abort();
-    printf("%s\n", cstr(list_at(a, 0)));
-    printf("%ld\n", cnum(list_at(a, 1)));
-    printf("%f\n", cfloat(list_at(a, 2)));
-    printf("len: %d\n", llen((word*)list_at(a, 3)));
-    break;
   }
+
   return IFALSE;
 }

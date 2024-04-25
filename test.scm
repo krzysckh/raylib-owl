@@ -17,7 +17,7 @@
     (clear-background bg)
 
     (draw-circle-gradient
-     (vec 100 200)
+     (vec 100.45 200)
      30
      (color 255 0 0 255)
      (color 0 0 255 255))
