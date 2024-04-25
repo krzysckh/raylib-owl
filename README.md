@@ -4,7 +4,7 @@ WIP raylib bindings for owl lisp
 
 api.txt imported (and tweaked a bit) from janet-lang/jaylib
 
-## HOW
+## how
 
 Owl lisp supports C extensions via custom sys-prims - basically
 syscalls, but to C functions, not the system. You define a
@@ -16,7 +16,7 @@ Also, you probably need the owl lisp source code on your machine,
 because `./raylib.c` requires `ovm.h`, and you need `ol.fasl`, to 
 bootstrap `ol-rl`.
 
-## BOOTSTRAPING `ol-rl`
+## bootstraping `ol-rl`
 
 `ol-rl` is the same thing as `ol`, but with compiled-in support for
 raylib `sys-prim`s, so it will be then used to interpret and/or
@@ -30,14 +30,14 @@ You probably also need to edit `OWL_SOURCE_PATH` there.
 $ make ol-rl
 ```
 
-## COMPILING PROGRAMS
+## compiling stuff
 
 ```console
 $ ol-rl -i /path/to/raylib-owl -x c -o test.c test.scm
 $ cc -DPRIM_CUSTOM -I$OWL_SOURCE_PATH/c test.c raylib.c -lraylib -lm -o test
 ```
 
-## GOTCHAS and CAVEATS
+## gotchas and caveats
 
 * Remember, that everything that can be evaluated at compile-time, will
   probably be evaluated at compile time. This can be used to embed files,
@@ -53,7 +53,7 @@ $ cc -DPRIM_CUSTOM -I$OWL_SOURCE_PATH/c test.c raylib.c -lraylib -lm -o test
   [this](https://pub.krzysckh.org/raylib-owl.html) is (for now) not good.
 * Good luck.
 
-## TODOS
+## TODOs
   * [ ] ol-rl
     * [x] works
     * quality-of-life improvements:
