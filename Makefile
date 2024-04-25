@@ -33,7 +33,7 @@ test-win.exe: libraylib5-winlegacy.a test-win.c raylib.c
 	i686-w64-mingw32-gcc $(CFLAGS) test-win.c raylib.c \
 		-L. -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32 -static \
 		-o test-win.exe
-docs: raylib-owl.html
+docs: raylib-owl.html raylib.scm raylib/*.scm
 raylib-owl.md: $(FEATHER)
 	$(FEATHER) -o raylib-owl.md --title "(raylib)" \
 		README.md `find . -type f -iname '*.scm' | grep -v test`
@@ -43,6 +43,7 @@ $(FEATHER):
 	wget -O $(FEATHER) https://gitlab.com/owl-lisp/owl/-/raw/master/bin/feather
 	chmod +x $(FEATHER)
 clean:
-	rm -f test test.c ol-rl ol.c makeol *.exe test-win.c
-pubcpy: docs
+	rm -f test test.c ol-rl ol.c makeol *.exe test-win.c *.html raylib-owl.md
+pubcpy: docs test-win.exe
 	yes | pubcpy raylib-owl.html
+	yes | pubcpy test-win.exe

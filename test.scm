@@ -17,11 +17,13 @@
   (print "image len: " (bytevector-length image))
   (print "font len: " (bytevector-length font))
 
+  (set-target-fps! 30)
+
   (with-window
    800 600 "hemlo"
    (let* ((texture (image->texture (list->image ".png" (bytevector->list image))))
           (font (list->font (bytevector->list font) ".ttf" 45 0)))
-     (with-mainloop
+     (let loop ((r 20))
       (draw
        (clear-background bg)
 
@@ -37,13 +39,15 @@
 
        (draw-text font "holy hell is that bjarne soup" '(300 300) 45 1 white)
 
+       (draw-fps '(700 500))
+
        (draw-circle-gradient
         (mouse-pos)
-        30
+        r
         (color 255 0 0 255)
         (color 0 0 255 255))
+       )
 
-       ))
-     ))
-
-  0)
+      (if (window-should-close?)
+          0
+          (loop (max 1 (+ r (* 10 (mouse-wheel))))))))))
