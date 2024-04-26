@@ -1,7 +1,10 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
 OWL_REVISION=4a1edc5657a4f06ab736ef92714facce890e05b0
-CFLAGS=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c -fsanitize=address
-CFLAGS_WIN=-O2 -ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
+
+CFLAGS_COMMON=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
+CFLAGS=$(CFLAGS_COMMON) -fsanitize=address
+CFLAGS_WIN=$(CFLAGS_COMMON)
+
 LDFLAGS=-L/usr/local/lib -lraylib -lm
 LDFLAGS_WIN=-L$(PWD) -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32 -static
 
@@ -30,14 +33,14 @@ ol-rt-win.c: raylib.c ovm-win.c
 	grep -v "ovm\.h" raylib.c | cat ovm-win.c - > ol-rt-win.c
 ol-rl: $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl
 	cp -v $(OWL_TEMP_SOURCE_PATH)/bin/ol ol-rl
-test: test.c raylib.c
+test: test.c
 	clang $(CFLAGS) test.c $(LDFLAGS) -lraylib -lm -o test
 test.c: test.scm ol-rl
 	./ol-rl -x c -o test.c -x c test.scm
-test-win.c: test.scm ol-rl.exe
+test-win.c: test.scm ol-rl.exe ovm-win.c
 	wine ol-rl.exe -x c -o test-win.c test.scm
 test-win.exe: test-win.c
-	i686-w64-mingw32-gcc $(CFLAGS) test-win.c $(LDFLAGS_WIN) -o test-win.exe
+	i686-w64-mingw32-gcc $(CFLAGS_WIN) test-win.c $(LDFLAGS_WIN) -o test-win.exe
 test.scm: raylib.scm raylib/*.scm
 libraylib5-winlegacy.a:
 	wget https://pub.krzysckh.org/libraylib5-winlegacy.a -O libraylib5-winlegacy.a
@@ -62,8 +65,9 @@ $(FEATHER):
 	wget -O $(FEATHER) https://gitlab.com/owl-lisp/owl/-/raw/master/bin/feather
 	chmod +x $(FEATHER)
 clean:
-	rm -fr test test.c *.exe test-win.c *.html raylib-owl.md ol-rt.c \
+	rm -fr test test.c test-win.c *.html raylib-owl.md ol-rt.c \
 		$(OWL_TEMP_SOURCE_PATH)
-pubcpy: ol-rl.exe docs
+pubcpy: ol-rl.exe test-win.exe docs
 	yes | pubcpy raylib-owl.html
 	yes | pubcpy ol-rl.exe
+	yes | pubcpy test-win.exe

@@ -456,6 +456,11 @@ TODO: this
 * [x] float GetMusicTimeLength(Music music)
 * [x] float GetMusicTimePlayed(Music music)
 
+301+
+## stuff
+* [ ] Music LoadMusicStreamFromMemory(const char *fileType, const unsigned char *data, int dataSize);
+* [ ] Wave LoadWaveFromMemory(const char *fileType, const unsigned char *fileData, int dataSize);
+
 ## AudioStream management functions
 * [ ] AudioStream InitAudioStream(unsigned int sampleRate, unsigned int sampleSize, unsigned int channels)
 * [ ] void UpdateAudioStream(AudioStream stream, const void *data, int samplesCount)

@@ -42,6 +42,9 @@
    set-music-pitch!
    music-time-length
    music-time-played
+
+   list->music-stream
+   list->wave
    )
 
   (begin
@@ -84,5 +87,8 @@
     (define (set-music-pitch! mus pitch)  (prim 298 mus pitch))
     (define (music-time-length mus)       (prim 299 mus))
     (define (music-time-played mus)       (prim 300 mus))
+
+    (define (list->music-stream type lst) (prim 301 (c-string type) lst))
+    (define (list->wave type lst)         (prim 302 (c-string type) lst))
 
     ))

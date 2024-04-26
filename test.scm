@@ -8,8 +8,11 @@
 (define bg #x222222)
 
 (define triangle-pts '((100 400) (300 500) (500 500)))
-(define image (list->bytevector (file->list "/home/kpm/Documents/img/bjaaarne.png")))
+(define image (list->bytevector (file->list "/home/kpm/Documents/img/bjaaarne.jpg")))
 (define font (list->bytevector (file->list "/home/kpm/.fonts/COMIC.TTF")))
+(define v (halve (file->list "/home/kpm/Documents/mus/radlery32.mp3")))
+(define sndf-1 (list->bytevector (cadr v)))
+(define sndf-2 (list->bytevector (caddr v)))
 
 (define (grad-circle pos r)
   (draw-circle-gradient
@@ -18,15 +21,20 @@
 (lambda (args)
   (print "image len: " (bytevector-length image))
   (print "font len: " (bytevector-length font))
+  (print "snd1 len: " (bytevector-length sndf-1))
+  (print "snd2 len: " (bytevector-length sndf-2))
 
   (set-target-fps! 60)
+  (set-config-flags! 4)
 
   (with-window
    800 600 "hemlo"
    (let* ((_ (init-audio-device))
           (bjarne (image->texture (list->image ".png" (bytevector->list image))))
           (font (list->font (bytevector->list font) ".ttf" 45 0))
-          (snd (file->music-stream "/home/kpm/Documents/mus/euro.wav")))
+          (snd (list->music-stream ".mp3" (append
+                                           (bytevector->list sndf-1)
+                                           (bytevector->list sndf-2)))))
      (play-music-stream snd)
      (let loop ((r 20) (points '()))
       (draw
@@ -36,7 +44,7 @@
        (draw-texture-pro
         bjarne
         '(0 0 603 324)
-        '(0 0 800 300)
+        `(0 0 ,(window-width) ,(/ (window-height) 2))
         '(0 0)
         0 white)
 

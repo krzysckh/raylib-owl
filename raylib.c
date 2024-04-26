@@ -72,33 +72,15 @@ prim_custom(int op, word a, word b, word c)
   case 105: return BOOL(IsWindowMaximized());
   case 106: return BOOL(IsWindowResized());
   case 107: return BOOL(IsWindowState(cnum(a)));
-  case 108:
-    SetWindowState(cnum(a));
-    return ITRUE;
-  case 109:
-    ClearWindowState(cnum(a));
-    return ITRUE;
-  case 110:
-    ToggleFullscreen();
-    return ITRUE;
-  case 111:
-    SetWindowIcon(*(Image*)cnum(a));
-    return ITRUE;
-  case 112:
-    SetWindowTitle((char*)a+W);
-    return ITRUE;
-  case 113:
-    SetWindowPosition(cnum(a), cnum(b));
-    return ITRUE;
-  case 114:
-    SetWindowMonitor(cnum(a));
-    return ITRUE;
-  case 115:
-    SetWindowMinSize(cnum(a), cnum(b));
-    return ITRUE;
-  case 116:
-    SetWindowSize(cnum(a), cnum(b));
-    return ITRUE;
+  case 108: VOID(SetWindowState(cnum(a)));
+  case 109: VOID(ClearWindowState(cnum(a)));
+  case 110: VOID(ToggleFullscreen());
+  case 111: VOID(SetWindowIcon(DEREF(Image, a)));
+  case 112: VOID(SetWindowTitle((char*)a+W));
+  case 113: VOID(SetWindowPosition(cnum(a), cnum(b)));
+  case 114: VOID(SetWindowMonitor(cnum(a)));
+  case 115: VOID(SetWindowMinSize(cnum(a), cnum(b)));
+  case 116: VOID(SetWindowSize(cnum(a), cnum(b)));
   case 117: return onum((intptr_t)GetWindowHandle(), 1);
   case 118: return onum(GetScreenWidth(), 1);
   case 119: return onum(GetScreenHeight(), 1);
@@ -109,37 +91,21 @@ prim_custom(int op, word a, word b, word c)
   case 124: return onum(GetMonitorPhysicalHeight(cnum(a)), 1);
   case 125: return mkstring((char*)GetMonitorName(cnum(a)));
   case 126: return mkstring((char*)GetClipboardText());
-  case 127:
-    SetClipboardText((char*)a+W);
-    return ITRUE;
-  case 128:
-    ShowCursor();
-    return ITRUE;
-  case 129:
-    HideCursor();
-    return ITRUE;
+  case 127: VOID(SetClipboardText((char*)a+W));
+  case 128: VOID(ShowCursor());
+  case 129: VOID(HideCursor());
   case 130: return BOOL(IsCursorHidden());
-  case 131:
-    EnableCursor();
-    return ITRUE;
-  case 132:
-    DisableCursor();
-    return ITRUE;
+  case 131: VOID(EnableCursor());
+  case 132: VOID(DisableCursor());
   case 133: return BOOL(IsCursorOnScreen());
   case 134: { /* make-color (r g b a) → color */
     short R = cnum(list_at(a, 0)), G = cnum(list_at(a, 1)),
       B = cnum(list_at(a, 2)), A = cnum(list_at(a, 3));
     return onum((uint32_t)(A<<24)|(B<<16)|(G<<8)|R, 4);
   }
-  case 135:
-    ClearBackground(v2color(a));
-    return ITRUE;
-  case 136:
-    BeginDrawing();
-    return ITRUE;
-  case 137:
-    EndDrawing();
-    return ITRUE;
+  case 135: VOID(ClearBackground(v2color(a)));
+  case 136: VOID(BeginDrawing());
+  case 137: VOID(EndDrawing());
   case 138: { /* make-camera2d (offset-x . offset-y) (targ-x . targ-y) (rot . zoom) */
     not_implemented(Camera2D);
     /* Camera2D *cd = malloc(sizeof(Camera2D)); */
@@ -167,9 +133,7 @@ prim_custom(int op, word a, word b, word c)
   case 148:
   case 149:
     not_implemented("lol");
-  case 150:
-    SetTargetFPS(cnum(a));
-    return ITRUE;
+  case 150: VOID(SetTargetFPS(cnum(a)));
   case 151: return onum(GetFPS(), 1);
   case 152: return mkfloat(GetFrameTime());
   case 153: return mkfloat(GetTime());
@@ -192,19 +156,13 @@ prim_custom(int op, word a, word b, word c)
     Color cl = Fade(v2color(cnum(a)), cfloat(b));
     return mkint(*(uint32_t*)&cl);
   }
-  case 158:
-    SetConfigFlags(cnum(a));
-    return ITRUE;
-  case 159:
-    SetTraceLogLevel(cnum(a));
-    return ITRUE;
+  case 158: VOID(SetConfigFlags(cnum(a)));
+  case 159: VOID(SetTraceLogLevel(cnum(a)));
   case 160: /* TODO: callback */
     not_implemented(SetTraceLogCallback);
   case 161: /* TODO: variadic or just lisp-side string-append */
     not_implemented(TraceLog);
-  case 162:
-    TakeScreenshot(cstr(a));
-    return ITRUE;
+  case 162: VOID(TakeScreenshot(cstr(a)));
   case 163: {
     FilePathList fpl = LoadDroppedFiles();
     word lst = INULL;
@@ -215,17 +173,13 @@ prim_custom(int op, word a, word b, word c)
     UnloadDroppedFiles(fpl);
     return lst;
   }
-  case 164:
-    OpenURL(cstr(a));
-    return ITRUE;
+  case 164: VOID(OpenURL(cstr(a)));
   case 165: return BOOL(IsKeyPressed(cnum(a)));
   case 166: return BOOL(IsKeyDown(cnum(a)));
   case 167: return BOOL(IsKeyReleased(cnum(a)));
   case 168: return BOOL(IsKeyUp(cnum(a)));
   case 169: return onum(GetKeyPressed(), 1);
-  case 170:
-    SetExitKey(cnum(a));
-    return ITRUE;
+  case 170: VOID(SetExitKey(cnum(a)));
   case 171: return BOOL(IsGamepadAvailable(cnum(a)));
   case 172: return mkstring((char*)GetGamepadName(cnum(a)));
   case 173: return BOOL(IsGamepadButtonPressed(cnum(a), cnum(b)));
@@ -247,15 +201,9 @@ prim_custom(int op, word a, word b, word c)
     return cons(mkfloat(pos.x),
                 cons(mkfloat(pos.y), INULL)); /* not a pair, so list2vec can be applied */
   }
-  case 187:
-    SetMousePosition(cnum(a), cnum(b));
-    return ITRUE;
-  case 188:
-    SetMouseOffset(cnum(a), cnum(b));
-    return ITRUE;
-  case 189:
-    SetMouseScale(cfloat(a), cfloat(b));
-    return ITRUE;
+  case 187: VOID(SetMousePosition(cnum(a), cnum(b)));
+  case 188: VOID(SetMouseOffset(cnum(a), cnum(b)));
+  case 189: VOID(SetMouseScale(cfloat(a), cfloat(b)));
   case 190: return mkfloat(GetMouseWheelMove());
   case 191: return onum(GetTouchX(), 1);
   case 192: return onum(GetTouchY(), 1);
@@ -264,9 +212,7 @@ prim_custom(int op, word a, word b, word c)
     return cons(onum(pos.x, 1), onum(pos.y, 1));
   }
 
-  case 194:
-    SetGesturesEnabled(cnum(a));
-    return ITRUE;
+  case 194: VOID(SetGesturesEnabled(cnum(a)));
   case 195: return BOOL(IsGestureDetected(cnum(a)));
   case 196: return onum(GetGestureDetected(), 1);
   case 197: return onum(GetTouchPointCount(), 1);
@@ -333,7 +279,10 @@ prim_custom(int op, word a, word b, word c)
   case 227: VOID(DrawRectangleGradientEx(list2rect(a), v2color(gg(b, 1)), v2color(gg(b, 2)), v2color(gg(c, 1)), v2color(gg(c, 2))));
   case 228: VOID(DrawRectangleLinesEx(list2rect(a), cnum(b), v2color(c)));
   case 229: VOID(DrawRectangleRounded(list2rect(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), v2color(c)));
-  case 230: VOID(DrawRectangleRoundedLines(list2rect(a), cfloat(gg(b, 1)), cnum(gg(b, 2)), cnum(gg(b, 3)), v2color(c)));
+  case 230: VOID(DrawRectangleRoundedLines(list2rect(a),
+                                           cfloat(gg(b, 1)),
+                                           cnum(gg(b, 2)),
+                                           v2color(c)));
   case 231: {
     vec p1 = list2vec(gg(a, 1));
     /* printf("fuck: %d\n", is_type(a, )); */
@@ -551,6 +500,28 @@ prim_custom(int op, word a, word b, word c)
   case 298: VOID(SetMusicPitch(DEREF(Music, a), cfloat(b)))
   case 299: return mkfloat(GetMusicTimeLength(DEREF(Music, a)));
   case 300: return mkfloat(GetMusicTimePlayed(DEREF(Music, a)));
+
+  case 301: {
+    Music *m = malloc(sizeof(Music));
+    uint N = llen((word*)b);
+    unsigned char *d = malloc(N);
+    printf("N = %d\n", N);
+    list2data(b, d, N);
+    *m = LoadMusicStreamFromMemory(cstr(a), d, N);
+    /* i don't know if i should free(d)
+       TODO: look into LoadMusicStreamFromMemory if it copies *d */
+    return PTR(m);
+  }
+  case 302: {
+    Wave *w = malloc(sizeof(Wave));
+    uint N = llen((word*)b);
+    unsigned char *d = malloc(N);
+    list2data(b, d, N);
+    *w = LoadWaveFromMemory(cstr(a), d, N);
+    /* i don't know if i should free(d)
+       TODO: look into LoadMusicStreamFromMemory if it copies *d */
+    return PTR(w);
+  }
 
   }
 
