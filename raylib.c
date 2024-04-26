@@ -129,7 +129,7 @@ prim_custom(int op, word a, word b, word c)
   case 134: { /* make-color (r g b a) → color */
     short R = cnum(list_at(a, 0)), G = cnum(list_at(a, 1)),
       B = cnum(list_at(a, 2)), A = cnum(list_at(a, 3));
-    return mkint((uint32_t)(A<<24)|(B<<16)|(G<<8)|R);
+    return onum((uint32_t)(A<<24)|(B<<16)|(G<<8)|R, 4);
   }
   case 135:
     ClearBackground(v2color(a));

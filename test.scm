@@ -5,10 +5,7 @@
  (raylib common)
  (raylib))
 
-
-(define blue  (color 0 0 255 255))
-(define white (color 255 255 255 255))
-(define bg    #x222222)
+(define bg #x222222)
 
 (define triangle-pts '((100 400) (300 500) (500 500)))
 (define image (list->bytevector (file->list "/home/kpm/Documents/img/bjaaarne.png")))

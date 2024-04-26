@@ -117,6 +117,7 @@
     (define (disable-cursor!)                  (prim 132))
     (define (cursor-on-screen?)                (prim 133))
     (define (make-color r g b a)               (prim 134 (list r g b a)))
+    (define color make-color)
 
     (define (clear-background color)
       (if (list? color)
@@ -141,6 +142,5 @@
     (define (take-screenshot! path)                 (prim 162 path))
     (define (dropped-files)                         (prim 163))
     (define (open-url url)                          (prim 164 url))
-    (define color make-color)
 
     ))

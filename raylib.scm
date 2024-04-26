@@ -21,6 +21,11 @@
    vec vec2 vec3 vec4 make-vector ;; same stuff
    rec rectangle rect ;; same
 
+   lightgray gray darkgray yellow gold orange pink
+   red maroon green lime darkgreen skyblue blue
+   darkblue purple violet darkpurple beige brown
+   darkbrown white black blank magenta raywhite
+
    (exports (raylib window))
    (exports (raylib io))
    (exports (raylib draw))
@@ -59,6 +64,39 @@
        ((a b c d) (vec4 a b c d))))
 
     (define make-vector vec)
+    (define lightgray  4291348680)
+    (define gray       4286743170)
+    (define darkgray   4283453520)
+    (define yellow     4278254077)
+    (define gold       4278242303)
+    (define orange     4278231551)
+    (define pink       4290932223)
+    (define red        4281805286)
+    (define maroon     4281803198)
+    (define green      4281394176)
+    (define lime       4281310720)
+    (define darkgreen  4281103616)
+    (define skyblue    4294950758)
+    (define blue       4294015232)
+    (define darkblue   4289483264)
+    (define purple     4294933192)
+    (define violet     4290657415)
+    (define darkpurple 4286455664)
+    (define beige      4286820563)
+    (define brown      4283394687)
+    (define darkbrown  4281286476)
+    (define white      4294967295)
+    (define black      4278190080)
+    (define blank      0)
+    (define magenta    4294902015)
+    (define raywhite   4294309365)
+
+    (define colors
+      (list
+       lightgray gray darkgray yellow gold orange pink
+       red maroon green lime darkgreen skyblue blue
+       darkblue purple violet darkpurple beige brown
+       darkbrown white black blank magenta raywhite))
 
     (define-syntax draw
       (syntax-rules ()

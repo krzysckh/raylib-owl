@@ -1,6 +1,6 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
 OWL_REVISION=4a1edc5657a4f06ab736ef92714facce890e05b0
-CFLAGS=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c #-fsanitize=address
+CFLAGS=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c -fsanitize=address
 LDFLAGS=-L/usr/local/lib -lraylib -lm
 LDFLAGS_WIN=-L$(PWD) -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32 -static
 
