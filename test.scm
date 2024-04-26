@@ -1,6 +1,7 @@
 (import
  (owl toplevel)
  (owl lazy)
+ (prefix (owl sys) sys/)
  (raylib common)
  (raylib))
 
@@ -12,7 +13,6 @@
 (define triangle-pts '((100 400) (300 500) (500 500)))
 (define image (list->bytevector (file->list "/home/kpm/Documents/img/bjaaarne.png")))
 (define font (list->bytevector (file->list "/home/kpm/.fonts/COMIC.TTF")))
-
 
 (define (grad-circle pos r)
   (draw-circle-gradient

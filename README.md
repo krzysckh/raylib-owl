@@ -22,10 +22,6 @@ bootstrap `ol-rl`.
 raylib `sys-prim`s, so it will be then used to interpret and/or
 compile Owl lisp programs that depend on raylib.
 
-The `Makefile` assumes that You have compiled Owl lisp from source.
-You probably also need to edit `OWL_SOURCE_PATH` there.
-
-
 ```console
 $ make ol-rl
 ```
@@ -36,6 +32,12 @@ $ make ol-rl
 $ ol-rl -i /path/to/raylib-owl -x c -o test.c test.scm
 $ cc -DPRIM_CUSTOM -I$OWL_SOURCE_PATH/c test.c raylib.c -lraylib -lm -o test
 ```
+
+## windows
+
+If you're on windows, you can download the pre-compiled `ol-rl.exe` binary
+[here](https://pub.krzysckh.org/ol-rl.exe). If running it as a REPL, remember
+to use `--no-readline`.
 
 ## gotchas and caveats
 
@@ -54,10 +56,8 @@ $ cc -DPRIM_CUSTOM -I$OWL_SOURCE_PATH/c test.c raylib.c -lraylib -lm -o test
 * Good luck.
 
 ## TODOs
-  * [ ] ol-rl
+  * [x] ol-rl
     * [x] works
-    * quality-of-life improvements:
-        * [ ] embed `(raylib)` - the lisp sources - into `ol-rl`
-        * [ ] embed the raylib runtime (`ovm.c` + `raylib.c`) into `ol-rl`
-        * [ ] compile `ol-rl` without owl sources on the os (?)
+    * [x] embed `(raylib)` - the lisp sources - into `ol-rl`
+    * [x] embed the raylib runtime (`ovm.c` + `raylib.c`) into `ol-rl`
   * [ ] implement api.txt fully
