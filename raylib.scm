@@ -11,6 +11,7 @@
    (raylib io)
    (raylib draw)
    (raylib util)
+   (raylib audio)
    )
 
   (export
@@ -30,6 +31,7 @@
    (exports (raylib io))
    (exports (raylib draw))
    (exports (raylib util))
+   (exports (raylib audio))
    )
 
   (begin

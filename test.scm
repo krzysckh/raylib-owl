@@ -19,15 +19,19 @@
   (print "image len: " (bytevector-length image))
   (print "font len: " (bytevector-length font))
 
-  (set-target-fps! 30)
+  (set-target-fps! 60)
 
   (with-window
    800 600 "hemlo"
-   (let* ((bjarne (image->texture (list->image ".png" (bytevector->list image))))
-          (font (list->font (bytevector->list font) ".ttf" 45 0)))
+   (let* ((_ (init-audio-device))
+          (bjarne (image->texture (list->image ".png" (bytevector->list image))))
+          (font (list->font (bytevector->list font) ".ttf" 45 0))
+          (snd (file->music-stream "/home/kpm/Documents/mus/euro.wav")))
+     (play-music-stream snd)
      (let loop ((r 20) (points '()))
       (draw
        (clear-background bg)
+       (update-music-stream snd)
 
        (draw-texture-pro
         bjarne

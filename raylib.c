@@ -150,10 +150,12 @@ prim_custom(int op, word a, word b, word c)
     /* return onum((uint64_t)cd, 0); */
   }
   case 139:
-    BeginMode2D(*(Camera2D*)cnum(a));
+    /* BeginMode2D(*(Camera2D*)cnum(a)); */
+    not_implemented(Camera2D);
     return ITRUE;
   case 140:
-    EndMode2D();
+    not_implemented(Camera2D);
+    /* EndMode2D(); */
     return ITRUE;
   case 141:
   case 142:
@@ -412,17 +414,17 @@ prim_custom(int op, word a, word b, word c)
 
   case 250: {
     UnloadImage(*(Image*)cptr(a));
-    free(cptr(a));
+    /* free(cptr(a)); */
   }
 
   case 251: {
     UnloadTexture(*(Texture2D*)cptr(a));
-    free(cptr(a));
+    /* free(cptr(a)); */
   }
 
   case 252: {
     UnloadRenderTexture(*(RenderTexture2D*)cptr(a));
-    free(cptr(a));
+    /* free(cptr(a)); */
   }
 
   case 253: {
@@ -463,7 +465,7 @@ prim_custom(int op, word a, word b, word c)
   }
   case 262: {
     UnloadFont(DEREF(Font, a));
-    free(cptr(a));
+    /* free(cptr(a)); */
     return ITRUE;
   }
   case 263: {
@@ -493,6 +495,62 @@ prim_custom(int op, word a, word b, word c)
     return cons(onum(s.x, 1), onum(s.y, 1));
   }
 
+  case 269: VOID(InitAudioDevice());
+  case 270: VOID(CloseAudioDevice());
+  case 271: return BOOL(IsAudioDeviceReady());
+  case 272: VOID(SetMasterVolume(cfloat(a)));
+
+  case 273: {
+    Wave *w = malloc(sizeof(Wave));
+    *w = LoadWave(cstr(a));
+    return PTR(w);
+  }
+  case 274: {
+    Sound *s = malloc(sizeof(Sound));
+    *s = LoadSound(cstr(a));
+    return PTR(s);
+  }
+  case 275: {
+    Sound *s = malloc(sizeof(Sound));
+    *s = LoadSoundFromWave(DEREF(Wave, a));
+    return PTR(s);
+  }
+  case 276: VOID(UnloadWave(DEREF(Wave, a)));
+  case 277: VOID(UnloadSound(DEREF(Sound, a)));
+  case 278: VOID(ExportWave(DEREF(Wave, a), cstr(b)));
+
+  case 279: VOID(PlaySound(DEREF(Sound, a)));
+  case 280: VOID(PauseSound(DEREF(Sound, a)));
+  case 281: VOID(ResumeSound(DEREF(Sound, a)));
+  case 282: VOID(StopSound(DEREF(Sound, a)));
+
+  case 283: return BOOL(IsSoundPlaying(DEREF(Sound, a)));
+  case 284: VOID(SetSoundVolume(DEREF(Sound, a), cfloat(b)));
+  case 285: VOID(SetSoundPitch(DEREF(Sound, a), cfloat(b)));
+  case 286: VOID(WaveFormat(cptr(a), cnum(b), cnum(car(c)), cnum(cadr(c))))
+  case 287: {
+    Wave *w = malloc(sizeof(Wave));
+    *w = WaveCopy(DEREF(Wave, a));
+    return PTR(w);
+  }
+  case 288: VOID(WaveCrop(cptr(a), cnum(b), cnum(c)));
+
+  case 289: {
+    Music* m = malloc(sizeof(Music));
+    *m = LoadMusicStream(cstr(a));
+    return PTR(m);
+  }
+  case 290: VOID(UnloadMusicStream(DEREF(Music, a)));
+  case 291: VOID(PlayMusicStream(DEREF(Music, a)));
+  case 292: VOID(UpdateMusicStream(DEREF(Music, a)));
+  case 293: VOID(StopMusicStream(DEREF(Music, a)));
+  case 294: VOID(PauseMusicStream(DEREF(Music, a)));
+  case 295: VOID(ResumeMusicStream(DEREF(Music, a)));
+  case 296: return BOOL(IsMusicStreamPlaying(DEREF(Music, a)));
+  case 297: VOID(SetMusicVolume(DEREF(Music, a), cfloat(b)))
+  case 298: VOID(SetMusicPitch(DEREF(Music, a), cfloat(b)))
+  case 299: return mkfloat(GetMusicTimeLength(DEREF(Music, a)));
+  case 300: return mkfloat(GetMusicTimePlayed(DEREF(Music, a)));
 
   }
 

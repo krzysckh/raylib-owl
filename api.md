@@ -1,5 +1,3 @@
--*- mode: markdown -*- 
-
 ## Window-related functions
 * [x] void InitWindow(int width, int height, const char *title)
 * [x] bool WindowShouldClose(void)
@@ -46,9 +44,9 @@
 * [x] void ClearBackground(Color color)
 * [x] void BeginDrawing(void)
 * [x] void EndDrawing(void)
-* [x] make-camera2d
-* [x] void BeginMode2D(Camera2D camera)
-* [x] void EndMode2D(void)
+* [ ] make-camera2d
+* [ ] void BeginMode2D(Camera2D camera)
+* [ ] void EndMode2D(void)
 * [ ] make-camera3d
 * [ ] void BeginMode3D(Camera3D camera)
 * [ ] void EndMode3D(void)
@@ -86,7 +84,6 @@
 ## Files management functions
 * [x] FilePathList LoadDroppedFiles()
 * [x] void UnloadDroppedFiles(void)
-
 * [x] void OpenURL(const char *url)
 
 
@@ -384,7 +381,6 @@ TODO: this
 * [ ] Shader LoadShader(const char *vsFileName, const char *fsFileName)
 * [ ] Shader LoadShaderCode(char *vsCode, char *fsCode)
 * [ ] void UnloadShader(Shader shader)
-
 * [ ] Shader GetShaderDefault(void)
 * [ ] Texture2D GetTextureDefault(void)
 
@@ -416,49 +412,49 @@ TODO: this
 * [ ] void BeginVrDrawing(void)
 * [ ] void EndVrDrawing(void)
 
+269+
 ## Audio device management functions
-* [ ] void InitAudioDevice(void)
-* [ ] void CloseAudioDevice(void)
-* [ ] bool IsAudioDeviceReady(void)
-* [ ] void SetMasterVolume(float volume)
+* [x] void InitAudioDevice(void)
+* [x] void CloseAudioDevice(void)
+* [x] bool IsAudioDeviceReady(void)
+* [x] void SetMasterVolume(float volume)
 
+273+
 ## Wave/Sound loading/unloading functions
-* [ ] Wave LoadWave(const char *fileName)
-* [ ] Wave LoadWaveEx(void *data, int sampleCount, int sampleRate, int sampleSize, int channels)
-* [ ] Sound LoadSound(const char *fileName)
-* [ ] Sound LoadSoundFromWave(Wave wave)
-* [ ] void UpdateSound(Sound sound, const void *data, int samplesCount)
-* [ ] void UnloadWave(Wave wave)
-* [ ] void UnloadSound(Sound sound)
-* [ ] void ExportWave(Wave wave, const char *fileName)
-* [ ] void ExportWaveAsCode(Wave wave, const char *fileName)
+* [x] Wave LoadWave(const char *fileName)
+* [x] Sound LoadSound(const char *fileName)
+* [x] Sound LoadSoundFromWave(Wave wave)
+* [x] void UnloadWave(Wave wave)
+* [x] void UnloadSound(Sound sound)
+* [x] void ExportWave(Wave wave, const char *fileName)
 
+279+
 ## Wave/Sound management functions
-* [ ] void PlaySound(Sound sound)
-* [ ] void PauseSound(Sound sound)
-* [ ] void ResumeSound(Sound sound)
-* [ ] void StopSound(Sound sound)
-* [ ] bool IsSoundPlaying(Sound sound)
-* [ ] void SetSoundVolume(Sound sound, float volume)
-* [ ] void SetSoundPitch(Sound sound, float pitch)
-* [ ] void WaveFormat(Wave *wave, int sampleRate, int sampleSize, int channels)
-* [ ] Wave WaveCopy(Wave wave)
-* [ ] void WaveCrop(Wave *wave, int initSample, int finalSample)
-* [ ] float *GetWaveData(Wave wave)
+* [x] void PlaySound(Sound sound)
+* [x] void PauseSound(Sound sound)
+* [x] void ResumeSound(Sound sound)
+* [x] void StopSound(Sound sound)
+* [x] bool IsSoundPlaying(Sound sound)
+* [x] void SetSoundVolume(Sound sound, float volume)
+* [x] void SetSoundPitch(Sound sound, float pitch)
+* [x] void WaveFormat(Wave *wave, int sampleRate, int sampleSize, int channels)
+* [x] Wave WaveCopy(Wave wave)
+* [x] void WaveCrop(Wave *wave, int initSample, int finalSample)
 
+289+
 ## Music management functions
-* [ ] Music LoadMusicStream(const char *fileName)
-* [ ] void UnloadMusicStream(Music music)
-* [ ] void PlayMusicStream(Music music)
-* [ ] void UpdateMusicStream(Music music)
-* [ ] void StopMusicStream(Music music)
-* [ ] void PauseMusicStream(Music music)
-* [ ] void ResumeMusicStream(Music music)
-* [ ] bool IsMusicPlaying(Music music)
-* [ ] void SetMusicVolume(Music music, float volume)
-* [ ] void SetMusicPitch(Music music, float pitch)
-* [ ] float GetMusicTimeLength(Music music)
-* [ ] float GetMusicTimePlayed(Music music)
+* [x] Music LoadMusicStream(const char *fileName)
+* [x] void UnloadMusicStream(Music music)
+* [x] void PlayMusicStream(Music music)
+* [x] void UpdateMusicStream(Music music)
+* [x] void StopMusicStream(Music music)
+* [x] void PauseMusicStream(Music music)
+* [x] void ResumeMusicStream(Music music)
+* [x] bool IsMusicStreamPlaying(Music music)
+* [x] void SetMusicVolume(Music music, float volume)
+* [x] void SetMusicPitch(Music music, float pitch)
+* [x] float GetMusicTimeLength(Music music)
+* [x] float GetMusicTimePlayed(Music music)
 
 ## AudioStream management functions
 * [ ] AudioStream InitAudioStream(unsigned int sampleRate, unsigned int sampleSize, unsigned int channels)
