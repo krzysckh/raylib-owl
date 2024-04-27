@@ -17,7 +17,7 @@ $(OWL_TEMP_SOURCE_PATH):
 	cd $(OWL_TEMP_SOURCE_PATH) && git checkout $(OWL_REVISION)
 $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl: ol-rt.c
 	$(MAKE) patch-owl
-	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC)
+	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC) CFLAGS="$(CFLAGS)"
 patch-owl:
 	sed -i.bak 's!"c/_vm\.c"!"$(PWD)/ol-rt.c"!' $(OWL_TEMP_SOURCE_PATH)/owl/compile.scm
 	sed -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm

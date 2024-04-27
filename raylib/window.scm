@@ -69,6 +69,10 @@
 
    dropped-files
    open-url
+
+   begin-camera2d-mode
+   end-camera2d-mode
+   with-camera2d
    )
 
   (begin
@@ -143,4 +147,22 @@
     (define (dropped-files)                         (prim 163))
     (define (open-url url)                          (prim 164 url))
 
+    (define (begin-camera2d-mode offset target rotation zoom)
+      (prim 139 offset target (list rotation zoom)))
+
+    (define (end-camera2d-mode)
+      (prim 140))
+
+    (define-syntax with-camera2d
+      (syntax-rules ()
+        ((with-camera2d offset target rotation zoom e ...)
+         (begin
+           (begin-camera2d-mode offset target rotation zoom)
+           e ...
+           (end-camera2d-mode)))
+        ((with-camera2d cam e ...)
+         (begin
+           (apply begin-camera2d-mode cam)
+           e ...
+           (end-camera2d-mode)))))
     ))

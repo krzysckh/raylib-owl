@@ -9,6 +9,7 @@
    draw-rectangle
    draw-rectangle-lines
    draw-line
+   draw-line-simple
    draw-line-ex
    draw-line-bezier
    draw-line-strip
@@ -19,6 +20,7 @@
    draw-circle-lines
    draw-ring
    draw-ring-lines
+   draw-rectangle-simple
    draw-rectangle-gradient-v
    draw-rectangle-gradient-h
    draw-rectangle-gradient-ex
@@ -48,6 +50,9 @@
 
     (define (draw-line p1 p2 color)
       (prim 211 p1 p2 color))
+
+    (define (draw-line-simple x1 y1 x2 y2 color)
+      (prim 211 (list x1 y1) (list x2 y2) color))
 
     (define (draw-line-ex p1 p2 thick color)
       (prim 212 p1 p2 (list thick color)))
@@ -83,10 +88,12 @@
 
     (define draw-rectangle
       (case-lambda
-       ((x y w h color) (prim 222 (list x y) (list w h) color))
        ((pos sizing color) (prim 222 pos sizing color))
        ((rec color) (prim 223 rec color))
        ((rec origin rot color) (prim 224 rec origin (list rot color)))))
+
+    (define (draw-rectangle-simple x y w h color)
+      (prim 222 (list x y) (list w h) color))
 
     (define (draw-rectangle-gradient-v pos w h col1 col2)
       (prim 225 pos (list w h) (list col1 col2)))

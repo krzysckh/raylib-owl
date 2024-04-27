@@ -4,9 +4,10 @@
 
 #include "ovm.h"
 
-#define cfloat(x) (is_type(x,TRAT)?((float)cnum(x)/(float)cnum(x+W)):   \
-                   ((is_type(x,TNUM)?(cnum((x)+W)):                     \
-                     ((float)(cnum(car(x)))/(float)cnum(cdr(x))))))
+#define cfloat(x)                                       \
+  (is_type(x,TRAT)?((float)cnum(x)/(float)cnum(x+W))    \
+   : ((is_type(x,TNUM)||is_type(x,TNUMN))?(cnum((x)))   \
+      : ((float)(cnum(car(x)))/(float)cnum(cdr(x)))))
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}
@@ -107,7 +108,8 @@ prim_custom(int op, word a, word b, word c)
   case 136: VOID(BeginDrawing());
   case 137: VOID(EndDrawing());
   case 138: { /* make-camera2d (offset-x . offset-y) (targ-x . targ-y) (rot . zoom) */
-    not_implemented(Camera2D);
+    not_implemented(138);
+    /* not_implemented(Camera2D); */
     /* Camera2D *cd = malloc(sizeof(Camera2D)); */
     /* cd->offset = (Vector2){ cnum(a), cnum(a+W) }; */
     /* cd->target = (Vector2){ cnum(b), cnum(b+W) }; */
@@ -115,14 +117,15 @@ prim_custom(int op, word a, word b, word c)
     /* cd->zoom = cnum(c+W); */
     /* return onum((uint64_t)cd, 0); */
   }
-  case 139:
-    /* BeginMode2D(*(Camera2D*)cnum(a)); */
-    not_implemented(Camera2D);
-    return ITRUE;
-  case 140:
-    not_implemented(Camera2D);
-    /* EndMode2D(); */
-    return ITRUE;
+  case 139: { /* offset target (rot zoom) a*/
+    Camera2D cam = {0};
+    cam.offset = list2vec(a);
+    cam.target = list2vec(b);
+    cam.rotation = cfloat(car(c));
+    cam.zoom = cfloat(cadr(c));
+    VOID(BeginMode2D(cam));
+  }
+  case 140: VOID(EndMode2D());
   case 141:
   case 142:
   case 143:
@@ -283,13 +286,7 @@ prim_custom(int op, word a, word b, word c)
                                            cfloat(gg(b, 1)),
                                            cnum(gg(b, 2)),
                                            v2color(c)));
-  case 231: {
-    vec p1 = list2vec(gg(a, 1));
-    /* printf("fuck: %d\n", is_type(a, )); */
-    /* printf("tuple?: %d, p1: .x = %f, .y = %f\n", is_type(gg(a, 1), TTUPLE), p1.x, p1.y); */
-    /* printf("denominator: %ld\n", cnum(gg(a,1)+W)); */
-    VOID(DrawTriangle(list2vec(gg(a, 1)), list2vec(gg(a, 2)), list2vec(gg(a, 3)), v2color(b)));
-  }
+  case 231: VOID(DrawTriangle(list2vec(gg(a, 1)), list2vec(gg(a, 2)), list2vec(gg(a, 3)), v2color(b)));
   case 232: VOID(DrawTriangleLines(list2vec(gg(a, 1)), list2vec(gg(a, 2)), list2vec(gg(a, 3)), v2color(b)));
   case 233: {
     int N = cnum(b), i;
