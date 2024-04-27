@@ -25,7 +25,7 @@
   (print "snd2 len: " (bytevector-length sndf-2))
 
   (set-target-fps! 60)
-  (set-config-flags! 4)
+  (set-config-flags! flag-window-resizable)
 
   (with-window
    800 600 "hemlo"

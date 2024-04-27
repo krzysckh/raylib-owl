@@ -505,7 +505,6 @@ prim_custom(int op, word a, word b, word c)
     Music *m = malloc(sizeof(Music));
     uint N = llen((word*)b);
     unsigned char *d = malloc(N);
-    printf("N = %d\n", N);
     list2data(b, d, N);
     *m = LoadMusicStreamFromMemory(cstr(a), d, N);
     /* i don't know if i should free(d)

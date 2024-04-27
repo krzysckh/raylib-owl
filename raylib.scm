@@ -22,10 +22,21 @@
    vec vec2 vec3 vec4 make-vector ;; same stuff
    rec rectangle rect ;; same
 
+   colors
+
    lightgray gray darkgray yellow gold orange pink
    red maroon green lime darkgreen skyblue blue
    darkblue purple violet darkpurple beige brown
    darkbrown white black blank magenta raywhite
+
+   window-flags
+
+   flag-vsync-hint flag-fullscreen-mode flag-window-resizable
+   flag-window-undecorated flag-window-hidden flag-window-minimized
+   flag-window-maximized flag-window-unfocused flag-window-topmost
+   flag-window-always-run flag-window-transparent flag-window-highdpi
+   flag-window-mouse-passthrough flag-borderless-windowed-mode
+   flag-msaa-4x-hint flag-interlaced-hint
 
    (exports (raylib window))
    (exports (raylib io))
@@ -93,12 +104,37 @@
     (define magenta    4294902015)
     (define raywhite   4294309365)
 
+    (define flag-vsync-hint                #x00000040)
+    (define flag-fullscreen-mode           #x00000002)
+    (define flag-window-resizable          #x00000004)
+    (define flag-window-undecorated        #x00000008)
+    (define flag-window-hidden             #x00000080)
+    (define flag-window-minimized          #x00000200)
+    (define flag-window-maximized          #x00000400)
+    (define flag-window-unfocused          #x00000800)
+    (define flag-window-topmost            #x00001000)
+    (define flag-window-always-run         #x00000100)
+    (define flag-window-transparent        #x00000010)
+    (define flag-window-highdpi            #x00002000)
+    (define flag-window-mouse-passthrough  #x00004000)
+    (define flag-borderless-windowed-mode  #x00008000)
+    (define flag-msaa-4x-hint              #x00000020)
+    (define flag-interlaced-hint           #x00010000)
+
     (define colors
       (list
        lightgray gray darkgray yellow gold orange pink
        red maroon green lime darkgreen skyblue blue
        darkblue purple violet darkpurple beige brown
        darkbrown white black blank magenta raywhite))
+
+    (define window-flags
+      flag-vsync-hint flag-fullscreen-mode flag-window-resizable
+      flag-window-undecorated flag-window-hidden flag-window-minimized
+      flag-window-maximized flag-window-unfocused flag-window-topmost
+      flag-window-always-run flag-window-transparent flag-window-highdpi
+      flag-window-mouse-passthrough flag-borderless-windowed-mode
+      flag-msaa-4x-hint flag-interlaced-hint)
 
     (define-syntax draw
       (syntax-rules ()

@@ -2,7 +2,8 @@
 
 WIP raylib bindings for owl lisp
 
-api.txt imported (and tweaked a bit) from janet-lang/jaylib
+api.md imported (and tweaked a bit) from janet-lang/jaylib,
+it is probably a bit outdated.
 
 ## how
 
