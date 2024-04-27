@@ -13,10 +13,6 @@ syscalls, but to C functions, not the system. You define a
 then call `(sys-prim op a b c)` from the lisp side, and then compile 
 and link them together.
 
-Also, you probably need the owl lisp source code on your machine,
-because `./raylib.c` requires `ovm.h`, and you need `ol.fasl`, to 
-bootstrap `ol-rl`.
-
 ## bootstraping `ol-rl`
 
 `ol-rl` is the same thing as `ol`, but with compiled-in support for
