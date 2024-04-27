@@ -28,9 +28,11 @@ patch-owl:
 	echo "echo no tests" > $(OWL_TEMP_SOURCE_PATH)/tests/run
 	chmod +x $(OWL_TEMP_SOURCE_PATH)/tests/run
 ol-rt.c: raylib.c $(OWL_TEMP_SOURCE_PATH)
-	grep -v "ovm\.h" raylib.c | cat $(OWL_TEMP_SOURCE_PATH)/c/ovm.h - $(OWL_TEMP_SOURCE_PATH)/c/ovm.c > ol-rt.c
+	echo '#define PRIM_CUSTOM' > /tmp/_prim.c
+	grep -v "ovm\.h" raylib.c | cat /tmp/_prim.c $(OWL_TEMP_SOURCE_PATH)/c/ovm.h - $(OWL_TEMP_SOURCE_PATH)/c/ovm.c > ol-rt.c
 ol-rt-win.c: raylib.c ovm-win.c
-	grep -v "ovm\.h" raylib.c | cat ovm-win.c - > ol-rt-win.c
+	echo '#define PRIM_CUSTOM' > /tmp/_prim.c
+	grep -v "ovm\.h" raylib.c | cat /tmp/_prim.c ovm-win.c - > ol-rt-win.c
 ol-rl: $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl
 	cp -v $(OWL_TEMP_SOURCE_PATH)/bin/ol ol-rl
 test: test.c

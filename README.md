@@ -30,8 +30,9 @@ $ make ol-rl
 ## compiling stuff
 
 ```console
-$ ol-rl -i /path/to/raylib-owl -x c -o test.c test.scm
-$ cc -DPRIM_CUSTOM -I$OWL_SOURCE_PATH/c test.c raylib.c -lraylib -lm -o test
+$ ol-rl -o test.c test.scm
+$ cc test.c -lraylib -lm -o test
+$ ./test
 ```
 
 ## windows
