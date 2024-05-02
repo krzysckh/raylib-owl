@@ -1,5 +1,5 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
-OWL_REVISION=4a1edc5657a4f06ab736ef92714facce890e05b0
+OWL_REVISION=4f1ab716388b425148f533efa7fb7d84a9ab1933
 
 CFLAGS_COMMON=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
 CFLAGS=$(CFLAGS_COMMON) -fsanitize=address
@@ -17,7 +17,7 @@ $(OWL_TEMP_SOURCE_PATH):
 	cd $(OWL_TEMP_SOURCE_PATH) && git checkout $(OWL_REVISION)
 $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl: ol-rt.c
 	$(MAKE) patch-owl
-	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC) CFLAGS="$(CFLAGS)"
+	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC)
 patch-owl:
 	sed -i.bak 's!"c/_vm\.c"!"$(PWD)/ol-rt.c"!' $(OWL_TEMP_SOURCE_PATH)/owl/compile.scm
 	sed -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm

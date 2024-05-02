@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <raylib.h>
+#include <string.h>
 
 #include "ovm.h"
 
@@ -18,8 +19,6 @@
 #define vec3 Vector3
 #define vec vec2
 #define gg(a, b) list_at(a, b-1)
-#define PTR(t) onum((intptr_t)t, 0)
-#define cptr(v) ((void*)(intptr_t)cnum(v))
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
@@ -31,8 +30,6 @@
   abort(); \
   return IFALSE;
 
-#define car(l) G(l, 1)
-#define cdr(l) G(l, 2)
 #define cadr(l) car(cdr(l))
 #define caddr(l) car(cdr(cdr(l)))
 #define cadddr(l) car(cdr(cdr(cdr(l))))
