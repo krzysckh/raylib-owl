@@ -5,6 +5,12 @@ WIP raylib bindings for owl lisp
 api.md imported (and tweaked a bit) from janet-lang/jaylib,
 it is probably a bit outdated.
 
+## dependencies
+
+* raylib from @master - tested on f1007554a0a8145060797c0aa8169bdaf2c1c6b8
+* GNU sed - BSD one may not work
+* GNU make 
+
 ## how
 
 Owl lisp supports C extensions via custom sys-prims - basically

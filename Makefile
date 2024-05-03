@@ -4,9 +4,21 @@ OWL_REVISION=4f1ab716388b425148f533efa7fb7d84a9ab1933
 CFLAGS_COMMON=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
 CFLAGS=$(CFLAGS_COMMON) -fsanitize=address
 CFLAGS_WIN=$(CFLAGS_COMMON)
+CFLAGS_OPENBSD=$(CFLAGS_COMMON)
+
+SED=sed
 
 LDFLAGS=-L/usr/local/lib -lraylib -lm
 LDFLAGS_WIN=-L$(PWD) -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32 -static
+LDFLAGS_OPENBSD=$(LDFLAGS) -lpthread -lglfw
+
+OS!=uname -s|tr '[:upper:]' '[:lower:]'
+
+ifeq "$(OS)" "openbsd"
+CFLAGS:=$(CFLAGS_OPENBSD)
+LDFLAGS:=$(LDFLAGS_OPENBSD)
+SED:=gsed
+endif
 
 FEATHER=/tmp/feather
 
@@ -19,9 +31,9 @@ $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl: ol-rt.c
 	$(MAKE) patch-owl
 	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC)
 patch-owl:
-	sed -i.bak 's!"c/_vm\.c"!"$(PWD)/ol-rt.c"!' $(OWL_TEMP_SOURCE_PATH)/owl/compile.scm
-	sed -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm
-	sed -i.bak -e 's!bin/olp $$?!bin/olp -DPRIM_CUSTOM $$? $(LDFLAGS)!' \
+	$(SED) -i.bak 's!"c/_vm\.c"!"$(PWD)/ol-rt.c"!' $(OWL_TEMP_SOURCE_PATH)/owl/compile.scm
+	$(SED) -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm
+	$(SED) -i.bak -e 's!bin/olp $$?!bin/olp -DPRIM_CUSTOM $$? -I/usr/local/include $(LDFLAGS)!' \
 		-e 's!tests/\*\.scm tests/\*\.sh!!' \
 		$(OWL_TEMP_SOURCE_PATH)/Makefile
 	cd $(OWL_TEMP_SOURCE_PATH) && rm tests/*
