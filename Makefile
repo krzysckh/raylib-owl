@@ -12,6 +12,8 @@ LDFLAGS=-L/usr/local/lib -lraylib -lm
 LDFLAGS_WIN=-L$(PWD) -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32 -static
 LDFLAGS_OPENBSD=$(LDFLAGS) -lpthread -lglfw
 
+PREFIX=/usr/local
+
 OS!=uname -s|tr '[:upper:]' '[:lower:]'
 
 ifeq "$(OS)" "openbsd"
@@ -81,6 +83,10 @@ $(FEATHER):
 clean:
 	rm -fr test test.c test-win.c *.html raylib-owl.md ol-rt.c \
 		$(OWL_TEMP_SOURCE_PATH)
+install:
+	cp -v ol-rl $(PREFIX)/bin
+uninstall:
+	rm -vf $(PREFIX)/bin/ol-rl
 pubcpy: ol-rl.exe test-win.exe docs
 	yes | pubcpy raylib-owl.html
 	yes | pubcpy ol-rl.exe

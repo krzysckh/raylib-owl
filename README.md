@@ -27,6 +27,7 @@ compile Owl lisp programs that depend on raylib.
 
 ```console
 $ make ol-rl
+# make install
 ```
 
 ## compiling stuff
@@ -42,6 +43,21 @@ $ ./test
 If you're on windows, you can download the pre-compiled `ol-rl.exe` binary
 [here](https://pub.krzysckh.org/ol-rl.exe). If running it as a REPL, remember
 to use `--no-readline`.
+
+## targetting web with emscripten
+
+- compile raylib targetting web, or use [this](https://pub.krzysckh.org/libraylib5-web.a)
+  pre-compiled binary
+```console
+$ git clone https://raysan5/raylib
+$ cd raylib/src
+$ make clean all PLATFORM=PLATFORM_WEB
+```
+- compile your code for web
+```
+$ ol-rl -o test.c test.scm
+$ emcc -DPLATFORM_WEB -I/usr/local/include test.c /path/to/libraylib-web.a -o test.html -s USE_GLFW=3 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s ASYNCIFY -s ASSERTIONS=0
+```
 
 ## gotchas and caveats
 
