@@ -65,6 +65,8 @@
    image->font
    unload-font
    list->font
+
+   mouse-delta
    )
 
   (begin
@@ -132,5 +134,7 @@
     (define (image->font image key first-char) (prim 261 image key first-char))
     (define (unload-font f) (prim 262 f))
     (define (list->font lst type font-size n-chars) (prim 263 (c-string type) lst (list font-size n-chars)))
+
+    (define (mouse-delta) (prim 303))
 
     ))

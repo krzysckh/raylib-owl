@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <raylib.h>
 #include <string.h>
+
+#include <raylib.h>
+#include <rlgl.h>
 
 #include "ovm.h"
 
@@ -514,6 +516,11 @@ prim_custom(int op, word a, word b, word c)
     /* i don't know if i should free(d)
        TODO: look into LoadMusicStreamFromMemory if it copies *d */
     return PTR(w);
+  }
+
+  case 303: {
+    Vector2 m = GetMouseDelta();
+    return cons(mkfloat(m.x), mkfloat(m.y));
   }
 
   }
