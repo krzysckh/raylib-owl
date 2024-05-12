@@ -45,6 +45,7 @@ list_at(word l, int n)
   return list_at(G(l, 2), n-1);
 }
 
+/* TODO: accept bytevectors instead of lists */
 void
 list2data(word l, unsigned char *u, int N)
 {
