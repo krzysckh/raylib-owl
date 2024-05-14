@@ -80,4 +80,5 @@ $ emcc -DPLATFORM_WEB -I/usr/local/include test.c /path/to/libraylib-web.a -o te
     * [x] works
     * [x] embed `(raylib)` - the lisp sources - into `ol-rl`
     * [x] embed the raylib runtime (`ovm.c` + `raylib.c`) into `ol-rl`
-  * [ ] implement api.txt fully
+  * [ ] implement `api.md fully`
+  * [ ] implement `raymath-api.md` fully

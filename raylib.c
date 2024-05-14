@@ -2,8 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* what the hell mingw /usr/share/mingw-w64/include/minwindef.h:73 */
+#undef far
+#undef near
+
 #include <raylib.h>
-#include <rlgl.h>
+#include <raymath.h>
 
 #include "ovm.h"
 
@@ -21,6 +25,8 @@
 #define vec3 Vector3
 #define vec vec2
 #define gg(a, b) list_at(a, b-1)
+#define vec22list(v) cons(onum(v.x, 1), cons(onum(v.y, 1), INULL));
+#define Vec22listH(fcall) { vec2 V = (fcall); return vec22list(V); }
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
@@ -523,6 +529,44 @@ prim_custom(int op, word a, word b, word c)
     Vector2 m = GetMouseDelta();
     return cons(mkfloat(m.x), mkfloat(m.y));
   }
+
+  /*-- raymath --*/
+  case 500: return mkfloat(Clamp(cfloat(a), cfloat(b), cfloat(c)));
+  case 501: return mkfloat(Lerp(cfloat(a), cfloat(b), cfloat(c)));
+  case 502: return mkfloat(Normalize(cfloat(a), cfloat(b), cfloat(c)));
+  case 503: return mkfloat(Remap(cfloat(a), cfloat(b), cfloat(car(c)), cfloat(cadr(c)), cfloat(caddr(c))));
+  case 504: return mkfloat(Wrap(cfloat(a), cfloat(b), cfloat(c)));
+
+  case 505: Vec22listH(Vector2Zero());
+  case 506: Vec22listH(Vector2One());
+  case 507: Vec22listH(Vector2Add(list2vec(a), list2vec(b)));
+  case 508: Vec22listH(Vector2AddValue(list2vec(a), cfloat(b)));
+  case 509: Vec22listH(Vector2Subtract(list2vec(a), list2vec(b)));
+  case 510: Vec22listH(Vector2SubtractValue(list2vec(a), cfloat(b)));
+  case 511: return mkfloat(Vector2Length(list2vec(a)));
+  case 512: return mkfloat(Vector2LengthSqr(list2vec(a)));
+  case 513: return mkfloat(Vector2DotProduct(list2vec(a), list2vec(b)));
+  case 514: return mkfloat(Vector2Distance(list2vec(a), list2vec(b)));
+  case 515: return mkfloat(Vector2DistanceSqr(list2vec(a), list2vec(b)));
+  case 516: return mkfloat(Vector2Angle(list2vec(a), list2vec(b)));
+  case 517: return mkfloat(Vector2LineAngle(list2vec(a), list2vec(b)));
+  case 518: Vec22listH(Vector2Scale(list2vec(a), cfloat(b)));
+  case 519: Vec22listH(Vector2Multiply(list2vec(a), list2vec(b)));
+  case 520: Vec22listH(Vector2Negate(list2vec(a)));
+  case 521: Vec22listH(Vector2Divide(list2vec(a), list2vec(b)));
+  case 522: Vec22listH(Vector2Normalize(list2vec(a)));
+  /* case 523: Vec22listH(Vector2Transform(Vector2 v, Matrix mat)); */
+  case 524: Vec22listH(Vector2Lerp(list2vec(a), list2vec(b), cfloat(c)));
+  case 525: Vec22listH(Vector2Reflect(list2vec(a), list2vec(b)));
+  case 526: Vec22listH(Vector2Min(list2vec(a), list2vec(b)));
+  case 527: Vec22listH(Vector2Max(list2vec(a), list2vec(b)));
+  case 528: Vec22listH(Vector2Rotate(list2vec(a), cfloat(b)));
+  case 529: Vec22listH(Vector2MoveTowards(list2vec(a), list2vec(b), cfloat(c)));
+  case 530: Vec22listH(Vector2Invert(list2vec(a)));
+  case 531: Vec22listH(Vector2Clamp(list2vec(a), list2vec(b), list2vec(c)));
+  case 532: Vec22listH(Vector2ClampValue(list2vec(a), cfloat(b), cfloat(c)));
+  case 533: return BOOL(Vector2Equals(list2vec(a), list2vec(b)));
+  case 534: Vec22listH(Vector2Refract(list2vec(a), list2vec(b), cfloat(c)));
 
   }
 

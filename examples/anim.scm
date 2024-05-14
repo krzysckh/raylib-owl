@@ -7,17 +7,6 @@
 (define width 600)
 (define height width)
 
-(define (truncate-precision n . max-precision)
-  (lets ((max-precision (if (null? max-precision) 50 (car max-precision)))
-         (l (numerator n))
-         (m (denominator n))
-         (trunc-1 (- (log 10 l) max-precision))
-         (trunc-2 (- (log 10 m) max-precision))
-         (trunc (max trunc-1 trunc-2))
-         (a1 b1 (if (negative? trunc) (values l 0) (truncate/ l (expt 10 trunc))))
-         (a2 b2 (if (negative? trunc) (values m 0) (truncate/ m (expt 10 trunc)))))
-    (/ a1 a2)))
-
 (define speed 512)
 
 ;; anim = (n-frame (pos-x pos-y))
