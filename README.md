@@ -49,7 +49,7 @@ to use `--no-readline`.
 - compile raylib targetting web, or use [this](https://pub.krzysckh.org/libraylib5-web.a)
   pre-compiled binary
 ```console
-$ git clone https://raysan5/raylib
+$ git clone https://github.com/raysan5/raylib
 $ cd raylib/src
 $ make clean all PLATFORM=PLATFORM_WEB
 ```
@@ -80,5 +80,5 @@ $ emcc -DPLATFORM_WEB -I/usr/local/include test.c /path/to/libraylib-web.a -o te
     * [x] works
     * [x] embed `(raylib)` - the lisp sources - into `ol-rl`
     * [x] embed the raylib runtime (`ovm.c` + `raylib.c`) into `ol-rl`
-  * [ ] implement `api.md fully`
+  * [ ] implement `api.md` fully
   * [ ] implement `raymath-api.md` fully

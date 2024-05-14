@@ -13,3 +13,8 @@ ovm-win.c
 test-win.c
 raylib-owl.*
 ol-rt*
+*.wasm
+*.js
+*.html
+examples/*.c
+TAGS
