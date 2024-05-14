@@ -12,7 +12,8 @@
 	    (sz (/ (- 100 delta-sum) 10))
 	    (persist (if (mouse-btn-down?  mouse-button-left)
 			 (append persist (list (list sz last mp)))
-			 persist)))
+			 persist))
+            (persist (if (key-pressed? key-c) () persist)))
        (draw
 	(clear-background black)
 	(draw-line-ex last mp sz white)
