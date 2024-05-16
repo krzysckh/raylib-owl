@@ -1,6 +1,7 @@
 (import
  (owl toplevel)
  (owl random)
+ (owl list-extra)
  (raylib))
 
 (define width 800)
@@ -11,9 +12,8 @@
 (define init-max-len 300)
 (define speed 5)
 
-(define points (map (lambda (x) (string->symbol (string-append "el-"
-(number->string x)))) (iota 0 1 128)))
-(define connections
+(define points (map (lambda (x) (string->symbol (string-append "el-" (number->string x)))) (iota 0 1 128)))
+(define connections-pre
   (let loop ((n (length points)) (seed (seed->rands 2137)) (acc '()))
     (lets ((seed N (rand-range seed 1 8))
 	   (seed cpts (let L ((seed seed) (N N) (acc '()))
@@ -25,6 +25,20 @@
 	  (if (= n 0)
 	      acc
 	      (loop (- n 1) seed (append acc (list cpts)))))))
+
+(define (update-con conns n add)
+  (if (has? (list-ref conns n) add)
+      conns
+      (lset conns n (append (list-ref conns n) (list add)))))
+
+(define connections
+  (let loop ((n 0) (connections connections-pre))
+    (let* ((cur (list-ref connections n))
+           (connections (fold (lambda (c e) (update-con c e n)) connections cur)))
+      (if (= n (- (length connections-pre) 1))
+          connections
+          (loop (+ n 1) connections)))))
+
 (define base-positions
   (let loop ((n (length points)) (seed (seed->rands 420)) (acc '()))
     (lets ((seed x (rand-range seed 0 width))
