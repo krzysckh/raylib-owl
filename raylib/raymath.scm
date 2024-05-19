@@ -64,7 +64,7 @@
     (define (vec2scale v scale)                    (prim 518 v scale))
     (define (vec2* v1 v2)                          (prim 519 v1 v2))
     (define (vec2negate v)                         (prim 520 v))
-    (define (vec2/ v)                              (prim 521 v))
+    (define (vec2/ v1 v2)                          (prim 521 v1 v2))
     (define (vec2normalize v)                      (prim 522 v))
     (define (vec2lerp v1 v2 amount)                (prim 524 v1 v2 amount))
     (define (vec2reflect v normal)                 (prim 525 v normal))

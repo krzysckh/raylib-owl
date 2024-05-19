@@ -67,6 +67,7 @@
    list->font
 
    mouse-delta
+   set-texture-filter!
    )
 
   (begin
@@ -136,5 +137,7 @@
     (define (list->font lst type font-size n-chars) (prim 263 (c-string type) lst (list font-size n-chars)))
 
     (define (mouse-delta) (prim 303))
+
+    (define (set-texture-filter! texture filter) (prim 304 texture filter))
 
     ))

@@ -67,6 +67,10 @@
 
    camera-custom camera-free camera-orbital camera-first-person camera-third-person
    camera-perspective camera-orthographic
+
+   texture-filter-point texture-filter-bilinear texture-filter-trilinear
+   texture-filter-anisotropic-4x texture-filter-anisotropic-8x
+   texture-filter-anisotropic-16x
    )
 
   (begin
@@ -322,4 +326,12 @@
 
     (define camera-perspective 0)
     (define camera-orthographic 1)
+
+    (define texture-filter-point 0)           ;; no filter, just pixel approximation
+    (define texture-filter-bilinear 1)        ;; linear filtering
+    (define texture-filter-trilinear 2)       ;; trilinear filtering (linear with mipmaps)
+    (define texture-filter-anisotropic-4x 3)  ;; anisotropic filtering 4x
+    (define texture-filter-anisotropic-8x 4)  ;; anisotropic filtering 8x
+    (define texture-filter-anisotropic-16x 5) ;; anisotropic filtering 16x
+
     ))

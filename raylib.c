@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <math.h>
+
 /* what the hell mingw /usr/share/mingw-w64/include/minwindef.h:73 */
 #undef far
 #undef near
@@ -530,6 +532,8 @@ prim_custom(int op, word a, word b, word c)
     return cons(mkfloat(m.x), mkfloat(m.y));
   }
 
+  case 304: VOID(SetTextureFilter(DEREF(Texture2D, a), cnum(b)));
+
   /*-- raymath --*/
   case 500: return mkfloat(Clamp(cfloat(a), cfloat(b), cfloat(c)));
   case 501: return mkfloat(Lerp(cfloat(a), cfloat(b), cfloat(c)));
@@ -567,7 +571,6 @@ prim_custom(int op, word a, word b, word c)
   case 532: Vec22listH(Vector2ClampValue(list2vec(a), cfloat(b), cfloat(c)));
   case 533: return BOOL(Vector2Equals(list2vec(a), list2vec(b)));
   case 534: Vec22listH(Vector2Refract(list2vec(a), list2vec(b), cfloat(c)));
-
   }
 
   return IFALSE;
