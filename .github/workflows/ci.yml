@@ -4,28 +4,22 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krzysckh/raylib-owl-build-minimal:latest
+      credentials:
+        username: krzysckh
+        password: ${{ secrets.GHCR_KEY }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: set up mingw
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: any
-      - name: Set up GCC
-        uses: egor-tensin/setup-gcc@v1
-        with:
-          version: latest
-          platform: x64
       - name: build ol-rl.exe
         shell: bash
         run: |
-          sudo curl -o /usr/local/include/raylib.h https://raw.githubusercontent.com/raysan5/raylib/f1007554a0a8145060797c0aa8169bdaf2c1c6b8/src/raylib.h
-          sudo curl -o /usr/local/include/raymath.h https://raw.githubusercontent.com/raysan5/raylib/f1007554a0a8145060797c0aa8169bdaf2c1c6b8/src/raymath.h
           make ol-rl.exe
       - name: Set commit based variables
         shell: bash
         run: |
-          echo "FINAL_FILE_NAME=ol-rl-$(git rev-parse --short "$GITHUB_SHA").exe" >> "$GITHUB_ENV"
+          echo "FINAL_FILE_NAME=ol-rl-$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
       - name: Upload as artifact
         uses: actions/upload-artifact@v3
         with:
