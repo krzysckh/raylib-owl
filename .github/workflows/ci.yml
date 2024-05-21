@@ -1,0 +1,27 @@
+name: ol-rl
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krzysckh/raylib-owl-build-minimal:latest
+      credentials:
+        username: krzysckh
+        password: ${{ secrets.GHCR_KEY }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: build ol-rl.exe
+        shell: bash
+        run: |
+          make ol-rl.exe
+      - name: Set commit based variables
+        shell: bash
+        run: |
+          echo "FINAL_FILE_NAME=ol-rl-$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+      - name: Upload as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.FINAL_FILE_NAME }}
+          path: ol-rl.exe
