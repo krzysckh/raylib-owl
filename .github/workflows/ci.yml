@@ -19,8 +19,8 @@ jobs:
       - name: build ol-rl.exe
         shell: bash
         run: |
-          curl -o /usr/include/raylib.h https://raw.githubusercontent.com/raysan5/raylib/f1007554a0a8145060797c0aa8169bdaf2c1c6b8/src/raylib.h
-          curl -o /usr/include/raymath.h https://raw.githubusercontent.com/raysan5/raylib/f1007554a0a8145060797c0aa8169bdaf2c1c6b8/src/raymath.h
+          sudo curl -o /usr/include/raylib.h https://raw.githubusercontent.com/raysan5/raylib/f1007554a0a8145060797c0aa8169bdaf2c1c6b8/src/raylib.h
+          sudo curl -o /usr/include/raymath.h https://raw.githubusercontent.com/raysan5/raylib/f1007554a0a8145060797c0aa8169bdaf2c1c6b8/src/raymath.h
           make ol-rl.exe
       - name: Set commit based variables
         shell: bash
