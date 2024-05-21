@@ -16,12 +16,8 @@ jobs:
         shell: bash
         run: |
           make ol-rl.exe
-      - name: Set commit based variables
-        shell: bash
-        run: |
-          echo "FINAL_FILE_NAME=ol-rl-$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
       - name: Upload as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.FINAL_FILE_NAME }}
+          name: ol-rl
           path: ol-rl.exe
