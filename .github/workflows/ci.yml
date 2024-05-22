@@ -15,6 +15,7 @@ jobs:
       - name: build ol-rl.exe
         shell: bash
         run: |
+          echo  ${{ secrets.GHCR_KEY }}
           make ol-rl.exe
       - name: Upload as artifact
         uses: actions/upload-artifact@v3
