@@ -29,13 +29,18 @@
 #define gg(a, b) list_at(a, b-1)
 #define vec22list(v) cons(onum(v.x, 1), cons(onum(v.y, 1), INULL));
 #define Vec22listH(fcall) { vec2 V = (fcall); return vec22list(V); }
+#define with_data(ob, exp) { \
+    uint N; uint8_t fr; void *data = bvlst2ptr(ob, &N, &fr);    \
+    exp;                                                        \
+    if (fr) free(data);                                         \
+  }
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
                                   cfloat(list_at(t, 2)), cfloat(list_at(t, 3))})
 #define DEREF(T, v) (*(T*)cptr(v))
 
-#define not_implemented(f) \
+#define rl_not_imlpemented(f) \
   fprintf(stderr, "not-implemented %s (opcode %d)\n", #f, op);   \
   abort(); \
   return IFALSE;
@@ -53,7 +58,6 @@ list_at(word l, int n)
   return list_at(G(l, 2), n-1);
 }
 
-/* TODO: accept bytevectors instead of lists */
 void
 list2data(word l, unsigned char *u, int N)
 {
@@ -61,6 +65,37 @@ list2data(word l, unsigned char *u, int N)
   for (i = 0; i < N; ++i) {
     u[i] = cnum(car(l));
     l = cdr(l);
+  }
+}
+
+uint32_t
+bvec_len(word bvec)
+{
+  word hdr = header(bvec);
+  return payl_len(hdr);
+}
+
+uint8_t
+bvecp(word ob)
+{
+  if (allocp(ob))
+    ob = V(ob);
+  return ((hval)ob >> TPOS & 63) == TBVEC;
+}
+
+void *
+bvlst2ptr(word ob, uint *N, uint8_t *shouldfree)
+{
+  if (bvecp(ob)) {
+    *shouldfree = 0;
+    *N = bvec_len(ob);
+    return (void*)ob+W;
+  } else { /* list */
+    *shouldfree = 1;
+    *N = llen((word*)ob);
+    uint8_t *d = malloc(*N);
+    list2data(ob, d, *N);
+    return d;
   }
 }
 
@@ -116,8 +151,8 @@ prim_custom(int op, word a, word b, word c)
   case 136: VOID(BeginDrawing());
   case 137: VOID(EndDrawing());
   case 138: { /* make-camera2d (offset-x . offset-y) (targ-x . targ-y) (rot . zoom) */
-    not_implemented(138);
-    /* not_implemented(Camera2D); */
+    rl_not_imlpemented(138);
+    /* rl_not_imlpemented(Camera2D); */
     /* Camera2D *cd = malloc(sizeof(Camera2D)); */
     /* cd->offset = (Vector2){ cnum(a), cnum(a+W) }; */
     /* cd->target = (Vector2){ cnum(b), cnum(b+W) }; */
@@ -143,7 +178,7 @@ prim_custom(int op, word a, word b, word c)
   case 147:
   case 148:
   case 149:
-    not_implemented("lol");
+    rl_not_imlpemented("lol");
   case 150: VOID(SetTargetFPS(cnum(a)));
   case 151: return onum(GetFPS(), 1);
   case 152: return mkfloat(GetFrameTime());
@@ -162,7 +197,7 @@ prim_custom(int op, word a, word b, word c)
                      cons(mkfloat(h.z), INULL)));
   }
   case 156:
-    not_implemented(ColorFromHSV);
+    rl_not_imlpemented(ColorFromHSV);
   case 157: {
     Color cl = Fade(v2color(cnum(a)), cfloat(b));
     return mkint(*(uint32_t*)&cl);
@@ -170,9 +205,9 @@ prim_custom(int op, word a, word b, word c)
   case 158: VOID(SetConfigFlags(cnum(a)));
   case 159: VOID(SetTraceLogLevel(cnum(a)));
   case 160: /* TODO: callback */
-    not_implemented(SetTraceLogCallback);
+    rl_not_imlpemented(SetTraceLogCallback);
   case 161: /* TODO: variadic or just lisp-side string-append */
-    not_implemented(TraceLog);
+    rl_not_imlpemented(TraceLog);
   case 162: VOID(TakeScreenshot(cstr(a)));
   case 163: {
     FilePathList fpl = LoadDroppedFiles();
@@ -245,7 +280,7 @@ prim_custom(int op, word a, word b, word c)
   case 206:
   case 207:
   case 208:
-    not_implemented("camera stuff");
+    rl_not_imlpemented("camera stuff");
   case 209: VOID(DrawPixel(cnum(a), cnum(b), v2color(c)));
   case 210: VOID(DrawPixelV(list2vec2(a), v2color(b)));
   case 211: VOID(DrawLineV(list2vec2(a), list2vec(b), v2color(c)));
@@ -338,12 +373,8 @@ prim_custom(int op, word a, word b, word c)
   }
 
   case 245: {
-    int N = cnum(c);
     Image *i = malloc(sizeof(Image));
-    unsigned char *d = malloc(N);
-    list2data(b, d, N);
-    *i = LoadImageFromMemory(cstr(a), d, N);
-    free(d);
+    with_data(b, *i = LoadImageFromMemory(cstr(a), data, N));
     return PTR(i);
   }
 
@@ -424,10 +455,7 @@ prim_custom(int op, word a, word b, word c)
   }
   case 263: {
     Font *f = malloc(sizeof(Font));
-    int N = llen((word*)b);
-    unsigned char *d = malloc(N);
-    list2data(b, d, N);
-    *f = LoadFontFromMemory(cstr(a), d, N, cnum(car(c)), NULL, cnum(cadr(c)));
+    with_data(b, *f = LoadFontFromMemory(cstr(a), data, N, cnum(car(c)), NULL, cnum(cadr(c))));
     return PTR(f);
   }
 
@@ -508,22 +536,14 @@ prim_custom(int op, word a, word b, word c)
 
   case 301: {
     Music *m = malloc(sizeof(Music));
-    uint N = llen((word*)b);
-    unsigned char *d = malloc(N);
-    list2data(b, d, N);
-    *m = LoadMusicStreamFromMemory(cstr(a), d, N);
+    with_data(b, *m = LoadMusicStreamFromMemory(cstr(a), data, N));
     /* i don't know if i should free(d)
        TODO: look into LoadMusicStreamFromMemory if it copies *d */
     return PTR(m);
   }
   case 302: {
     Wave *w = malloc(sizeof(Wave));
-    uint N = llen((word*)b);
-    unsigned char *d = malloc(N);
-    list2data(b, d, N);
-    *w = LoadWaveFromMemory(cstr(a), d, N);
-    /* i don't know if i should free(d)
-       TODO: look into LoadMusicStreamFromMemory if it copies *d */
+    with_data(b, *w = LoadWaveFromMemory(cstr(a), data, N));
     return PTR(w);
   }
 

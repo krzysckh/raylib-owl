@@ -2,7 +2,7 @@ OWL_TEMP_SOURCE_PATH=/tmp/owl
 OWL_REVISION=4f1ab716388b425148f533efa7fb7d84a9ab1933
 
 CFLAGS_COMMON=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
-CFLAGS=$(CFLAGS_COMMON) -fsanitize=address
+CFLAGS=$(CFLAGS_COMMON)
 CFLAGS_WIN=$(CFLAGS_COMMON)
 CFLAGS_OPENBSD=$(CFLAGS_COMMON)
 
@@ -50,7 +50,7 @@ ol-rt-win.c: raylib.c ovm-win.c
 ol-rl: $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl
 	cp -v $(OWL_TEMP_SOURCE_PATH)/bin/ol ol-rl
 test: test.c
-	clang $(CFLAGS) test.c $(LDFLAGS) -lraylib -lm -o test
+	$(CC) $(CFLAGS) test.c $(LDFLAGS) -lraylib -lm -o test
 test.c: test.scm ol-rl
 	./ol-rl -x c -o test.c -x c test.scm
 test-win.c: test.scm ol-rl.exe ovm-win.c

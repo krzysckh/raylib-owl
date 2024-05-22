@@ -6,9 +6,15 @@
    (owl core))
 
   (export
+   maybe-bytevectorize
    prim)
 
   (begin
+    ;; lst → bvec|lst
+    (define (maybe-bytevectorize lst)
+      (let* ((l (if (bytevector? lst) lst (list->bytevector lst)))
+             (l (if l l lst)))
+        l))
     (define (prim n . vs)
       (let ((L (length vs)))
         (cond

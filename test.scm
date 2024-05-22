@@ -30,8 +30,8 @@
   (with-window
    800 600 "hemlo"
    (let* ((_ (init-audio-device))
-          (bjarne (image->texture (list->image ".png" (bytevector->list image))))
-          (font (list->font (bytevector->list font) ".ttf" 45 0))
+          (bjarne (image->texture (bytevector->image ".png" image)))
+          (font (bytevector->font font ".ttf" 45 0))
           (snd (list->music-stream ".mp3" (append
                                            (bytevector->list sndf-1)
                                            (bytevector->list sndf-2)))))

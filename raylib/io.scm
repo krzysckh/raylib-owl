@@ -51,6 +51,7 @@
 
    load-image
    list->image
+   bytevector->image
    export-image
    load-texture
    image->texture
@@ -65,6 +66,7 @@
    image->font
    unload-font
    list->font
+   bytevector->font
 
    mouse-delta
    set-texture-filter!
@@ -115,7 +117,6 @@
     (define (gesture-pinch-angle)          (prim 202))
 
     (define (load-image fname)               (prim 244 (c-string fname)))
-    (define (list->image type data)          (prim 245 (c-string type) data (length data)))
     (define (export-image img fname)         (prim 246 img (c-string fname)))
     (define (load-texture fname)             (prim 247 (c-string fname)))
     (define (image->texture img)             (prim 248 img))
@@ -124,7 +125,8 @@
     (define (unload-texture txt)             (prim 251 txt))
     (define (unload-render-texture txt)      (prim 252 txt))
     (define (screen->image)                  (prim 253))
-
+    (define (bytevector->image type data)    (prim 245 (c-string type) (maybe-bytevectorize data)))
+    (define list->image bytevector->image)
 
     (define (get-font-default) (prim 258))
     (define load-font
@@ -134,7 +136,9 @@
 
     (define (image->font image key first-char) (prim 261 image key first-char))
     (define (unload-font f) (prim 262 f))
-    (define (list->font lst type font-size n-chars) (prim 263 (c-string type) lst (list font-size n-chars)))
+    (define (bytevector->font lst type font-size n-chars)
+      (prim 263 (c-string type) (maybe-bytevectorize lst) (list font-size n-chars)))
+    (define list->font bytevector->font)
 
     (define (mouse-delta) (prim 303))
 

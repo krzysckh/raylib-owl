@@ -45,6 +45,8 @@
 
    list->music-stream
    list->wave
+   bytevector->music-stream
+   bytevector->wave
    )
 
   (begin
@@ -88,7 +90,13 @@
     (define (music-time-length mus)       (prim 299 mus))
     (define (music-time-played mus)       (prim 300 mus))
 
-    (define (list->music-stream type lst) (prim 301 (c-string type) lst))
-    (define (list->wave type lst)         (prim 302 (c-string type) lst))
+    (define (bytevector->music-stream type lst)
+      (prim 301 (c-string type) (maybe-bytevectorize lst)))
+
+    (define (bytevector->wave type lst)
+      (prim 302 (c-string type) (maybe-bytevectorize lst)))
+
+    (define list->music-stream bytevector->music-stream)
+    (define list->wave bytevector->wave)
 
     ))
