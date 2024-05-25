@@ -164,7 +164,6 @@
     (define measure-text
       (case-lambda
        ((text font-size) (prim 267 (c-string text) font-size))
-       ((font text font-size spacing) (prim 268 font (c-string text)
-                                            font-size spacing))))
-
+       ((font text font-size spacing) (let* ((sz (prim 268 font (c-string text) (list font-size spacing))))
+                                        (values (car sz) (cdr sz))))))
     ))
