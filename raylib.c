@@ -29,11 +29,7 @@
 #define gg(a, b) list_at(a, b-1)
 #define vec22list(v) cons(onum(v.x, 1), cons(onum(v.y, 1), INULL));
 #define Vec22listH(fcall) { vec2 V = (fcall); return vec22list(V); }
-#define with_data(ob, exp) { \
-    uint N; uint8_t fr; void *data = bvlst2ptr(ob, &N, &fr);    \
-    exp;                                                        \
-    if (fr) free(data);                                         \
-  }
+#define with_data(ob, exp) {uint N; void *data = bvlst2ptr(ob, &N); exp;}
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
@@ -84,14 +80,15 @@ bvecp(word ob)
 }
 
 void *
-bvlst2ptr(word ob, uint *N, uint8_t *shouldfree)
+bvlst2ptr(word ob, uint *N)
 {
+  void *ret;
   if (bvecp(ob)) {
-    *shouldfree = 0;
     *N = bvec_len(ob);
-    return (void*)ob+W;
+    ret = malloc(*N);
+    memcpy(ret, (void*)ob+W, *N);
+    return ret;
   } else { /* list */
-    *shouldfree = 1;
     *N = llen((word*)ob);
     uint8_t *d = malloc(*N);
     list2data(ob, d, *N);

@@ -1,7 +1,7 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
 OWL_REVISION=4f1ab716388b425148f533efa7fb7d84a9ab1933
 
-CFLAGS_COMMON=-ggdb -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
+CFLAGS_COMMON=-g -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
 CFLAGS=$(CFLAGS_COMMON)
 CFLAGS_WIN=$(CFLAGS_COMMON)
 CFLAGS_OPENBSD=$(CFLAGS_COMMON)
@@ -35,7 +35,7 @@ $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl: ol-rt.c
 patch-owl:
 	$(SED) -i.bak 's!"c/_vm\.c"!"$(PWD)/ol-rt.c"!' $(OWL_TEMP_SOURCE_PATH)/owl/compile.scm
 	$(SED) -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm
-	$(SED) -i.bak -e 's!bin/olp $$?!bin/olp -DPRIM_CUSTOM $$? -I/usr/local/include $(LDFLAGS)!' \
+	$(SED) -i.bak -e 's!bin/olp $$?!bin/olp -g -DPRIM_CUSTOM $$? -I/usr/local/include $(LDFLAGS)!' \
 		-e 's!tests/\*\.scm tests/\*\.sh!!' \
 		$(OWL_TEMP_SOURCE_PATH)/Makefile
 	cd $(OWL_TEMP_SOURCE_PATH) && rm tests/*
