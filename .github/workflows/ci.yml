@@ -10,14 +10,28 @@ jobs:
         username: krzysckh
         password: ${{ secrets.GHCR_KEY }}
     steps:
+      - name: build raylib
+        shell: bash
+        run: |
+          apt install -y libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+          git clone https://github.com/raysan5/raylib
+          cd raylib
+          git checkout f1007554a0a8145060797c0aa8169bdaf2c1c6b8
+          cd src
+          make -j
+          make install
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: build ol-rl.exe
         shell: bash
         run: |
-          make ol-rl.exe
+          make clean ol-rl
+          make clean ol-rl.exe
+          mkdir build
+          mv ol-rl build/
+          mv ol-rl.exe build/
       - name: Upload as artifact
         uses: actions/upload-artifact@v3
         with:
           name: ol-rl
-          path: ol-rl.exe
+          path: build/

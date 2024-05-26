@@ -69,7 +69,7 @@
     (define-syntax draw
       (syntax-rules ()
         ((draw exp1 ...)
-         (begin
+         (when (window-ready?)
            (begin-drawing)
            exp1 ...
            (end-drawing)))))
