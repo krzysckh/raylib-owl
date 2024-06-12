@@ -4,6 +4,7 @@
 
 (lambda (_)
   (set-target-fps!  120)
+  (set-config-flags! flag-window-resizable)
   (with-window
    600 600 "mp"
    (let loop ((last (mouse-pos)) (persist ()) (sz 1))

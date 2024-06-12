@@ -69,7 +69,7 @@ ol-rl.exe: libraylib5-winlegacy.a ovm-win.c
 	$(MAKE) $(OWL_TEMP_SOURCE_PATH)
 	$(MAKE) patch-owl
 	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC) c/ol.c
-	i686-w64-mingw32-gcc $(CFLAGS_WIN) -o ol-rl.exe -DSILENT -DPRIM_CUSTOM $(OWL_TEMP_SOURCE_PATH)/c/ol.c $(LDFLAGS_WIN)
+	i686-w64-mingw32-gcc $(CFLAGS_WIN) -o ol-rl.exe -DPRIM_CUSTOM $(OWL_TEMP_SOURCE_PATH)/c/ol.c $(LDFLAGS_WIN)
 
 docs: raylib-owl.html raylib.scm raylib/*.scm
 raylib-owl.md: $(FEATHER)
