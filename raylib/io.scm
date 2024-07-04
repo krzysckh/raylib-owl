@@ -11,6 +11,7 @@
    key-released?
    key-up?
    key-pressed
+   char-pressed
    set-exit-key!
 
    gamepad-available?
@@ -77,7 +78,8 @@
     (define (key-down? k)     (prim 166 k))
     (define (key-released? k) (prim 167 k))
     (define (key-up? k)       (prim 168 k))
-    (define (key-pressed)     (prim 169))
+    (define (key-pressed)     (prim 169 1))
+    (define (char-pressed)    (prim 169 0))
     (define (set-exit-key! k) (prim 170 k))
 
     (define (gamepad-available? n)          (prim 171 n))

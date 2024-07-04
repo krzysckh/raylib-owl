@@ -221,7 +221,7 @@ prim_custom(int op, word a, word b, word c)
   case 166: return BOOL(IsKeyDown(cnum(a)));
   case 167: return BOOL(IsKeyReleased(cnum(a)));
   case 168: return BOOL(IsKeyUp(cnum(a)));
-  case 169: return onum(GetKeyPressed(), 1);
+  case 169: if (cnum(a)) return onum(GetKeyPressed(), 1); else return onum(GetCharPressed(), 1);
   case 170: VOID(SetExitKey(cnum(a)));
   case 171: return BOOL(IsGamepadAvailable(cnum(a)));
   case 172: return mkstring((char*)GetGamepadName(cnum(a)));
