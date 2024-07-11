@@ -18,3 +18,4 @@ ol-rt*
 *.html
 examples/*.c
 TAGS
+*.pl

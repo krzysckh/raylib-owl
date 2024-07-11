@@ -72,7 +72,34 @@
 
    begin-camera2d-mode
    end-camera2d-mode
+
+   window-fullscreen?
+   window-hidden?
+   window-maximized?
+   window-focused?
+   toggle-borderless-windowed
+   window-maximize
+   window-minimize
+   window-restore
+   set-window-icons!
+   set-window-max-size!
+   set-window-opacity!
+   set-window-focused!
+   render-width
+   render-height
+   render-size
+   current-monitor
+   monitor-position
+   monitor-refresh-rate
+   window-position
+   window-scale-dpi
+   enable-event-waiting!
+   disable-event-waiting!
+   begin-scissor-mode
+   end-scissor-mode
+
    with-camera2d
+   with-scissors
    )
 
   (begin
@@ -152,6 +179,44 @@
 
     (define (end-camera2d-mode)
       (prim 140))
+
+    (define (window-fullscreen?)          (prim 305))
+    (define (window-hidden?)              (prim 306))
+    (define (window-maximized?)           (prim 307))
+    (define (window-focused?)             (prim 308))
+    (define (toggle-borderless-windowed)  (prim 309))
+    (define (window-maximize)             (prim 310))
+    (define (window-minimize)             (prim 311))
+    (define (window-restore)              (prim 312))
+    (define (set-window-icons! icons)     (prim 313 icons))
+    (define (set-window-max-size! w h)    (prim 314 w h))
+    (define (set-window-opacity! flt)     (prim 315 flt))
+    (define (set-window-focused!)         (prim 316))
+    (define (render-width)                (prim 317))
+    (define (render-height)               (prim 318))
+    (define (render-size)                 (list (render-width) (render-height)))
+    (define (current-monitor)             (prim 319))
+    (define (monitor-position n)          (prim 320 n))
+    (define (monitor-refresh-rate n)      (prim 321 n))
+    (define (window-position)             (prim 322))
+    (define (window-scale-dpi)            (prim 323))
+    (define (enable-event-waiting!)       (prim 324))
+    (define (disable-event-waiting!)      (prim 325))
+    (define (begin-scissor-mode x y w h)  (prim 326 (cons x y) (cons w h)))
+    (define (end-scissor-mode)            (prim 327))
+
+    (define-syntax with-scissors
+      (syntax-rules ()
+        ((with-scissors x y w h e ...)
+         (begin
+           (begin-scissor-mode x y w h)
+           e ...
+           (end-scissor-mode)))
+        ((with-scissors s e ...)
+         (begin
+           (apply begin-scissor-mode s)
+           e ...
+           (end-scissor-mode)))))
 
     (define-syntax with-camera2d
       (syntax-rules ()

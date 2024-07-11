@@ -36,7 +36,7 @@
                                   cfloat(list_at(t, 2)), cfloat(list_at(t, 3))})
 #define DEREF(T, v) (*(T*)cptr(v))
 
-#define rl_not_imlpemented(f) \
+#define rl_not_implemented(f) \
   fprintf(stderr, "not-implemented %s (opcode %d)\n", #f, op);   \
   abort(); \
   return IFALSE;
@@ -63,6 +63,17 @@ list2data(word l, unsigned char *u, int N)
     l = cdr(l);
   }
 }
+
+void
+list2dataW(word l, uintptr_t *u, int N)
+{
+  int i;
+  for (i = 0; i < N; ++i) {
+    u[i] = (uintptr_t)cptr(car(l));
+    l = cdr(l);
+  }
+}
+
 
 uint32_t
 bvec_len(word bvec)
@@ -147,16 +158,7 @@ prim_custom(int op, word a, word b, word c)
   case 135: VOID(ClearBackground(v2color(a)));
   case 136: VOID(BeginDrawing());
   case 137: VOID(EndDrawing());
-  case 138: { /* make-camera2d (offset-x . offset-y) (targ-x . targ-y) (rot . zoom) */
-    rl_not_imlpemented(138);
-    /* rl_not_imlpemented(Camera2D); */
-    /* Camera2D *cd = malloc(sizeof(Camera2D)); */
-    /* cd->offset = (Vector2){ cnum(a), cnum(a+W) }; */
-    /* cd->target = (Vector2){ cnum(b), cnum(b+W) }; */
-    /* cd->rotation = cnum(c); */
-    /* cd->zoom = cnum(c+W); */
-    /* return onum((uint64_t)cd, 0); */
-  }
+  case 138: rl_not_implemented("unreal");
   case 139: { /* offset target (rot zoom) a*/
     Camera2D cam = {0};
     cam.offset = list2vec(a);
@@ -166,16 +168,9 @@ prim_custom(int op, word a, word b, word c)
     VOID(BeginMode2D(cam));
   }
   case 140: VOID(EndMode2D());
-  case 141:
-  case 142:
-  case 143:
-  case 144:
-  case 145:
-  case 146:
-  case 147:
-  case 148:
-  case 149:
-    rl_not_imlpemented("lol");
+  case 141: case 142: case 143: case 144:
+  case 145: case 146: case 147: case 148: case 149:
+    rl_not_implemented("what are you even trying to do");
   case 150: VOID(SetTargetFPS(cnum(a)));
   case 151: return onum(GetFPS(), 1);
   case 152: return mkfloat(GetFrameTime());
@@ -194,7 +189,7 @@ prim_custom(int op, word a, word b, word c)
                      cons(mkfloat(h.z), INULL)));
   }
   case 156:
-    rl_not_imlpemented(ColorFromHSV);
+    rl_not_implemented(ColorFromHSV);
   case 157: {
     Color cl = Fade(v2color(cnum(a)), cfloat(b));
     return mkint(*(uint32_t*)&cl);
@@ -202,9 +197,9 @@ prim_custom(int op, word a, word b, word c)
   case 158: VOID(SetConfigFlags(cnum(a)));
   case 159: VOID(SetTraceLogLevel(cnum(a)));
   case 160: /* TODO: callback */
-    rl_not_imlpemented(SetTraceLogCallback);
+    rl_not_implemented(SetTraceLogCallback);
   case 161: /* TODO: variadic or just lisp-side string-append */
-    rl_not_imlpemented(TraceLog);
+    rl_not_implemented(TraceLog);
   case 162: VOID(TakeScreenshot(cstr(a)));
   case 163: {
     FilePathList fpl = LoadDroppedFiles();
@@ -271,13 +266,7 @@ prim_custom(int op, word a, word b, word c)
   }
   case 202: return mkfloat(GetGesturePinchAngle());
 
-  case 203:
-  case 204:
-  case 205:
-  case 206:
-  case 207:
-  case 208:
-    rl_not_imlpemented("camera stuff");
+  case 203: case 204: case 205: case 206: case 207: case 208: rl_not_implemented("these numbers are imaginary");
   case 209: VOID(DrawPixel(cnum(a), cnum(b), v2color(c)));
   case 210: VOID(DrawPixelV(list2vec2(a), v2color(b)));
   case 211: VOID(DrawLineV(list2vec2(a), list2vec(b), v2color(c)));
@@ -550,6 +539,43 @@ prim_custom(int op, word a, word b, word c)
   }
 
   case 304: VOID(SetTextureFilter(DEREF(Texture2D, a), cnum(b)));
+  /* new api5 fixtures */
+  case 305: return BOOL(IsWindowFullscreen());
+  case 306: return BOOL(IsWindowHidden());
+  case 307: return BOOL(IsWindowMaximized());
+  case 308: return BOOL(IsWindowFocused());
+  case 309: VOID(ToggleBorderlessWindowed());
+  case 310: VOID(MaximizeWindow());
+  case 311: VOID(MinimizeWindow());
+  case 312: VOID(RestoreWindow());
+  case 313: {
+    // i have NOT tested that
+    uint i, N = llen((word*)a);
+    uintptr_t *d = malloc(N);
+    Image *imgs = malloc(N*sizeof(Image));
+    list2dataW(a, d, N);
+
+    for (i = 0; i < N; ++i)
+      imgs[i] = DEREF(Image, list_ref(a, i));
+
+    SetWindowIcons(imgs, N);
+    free(imgs);
+    free(d);
+  }
+  case 314: VOID(SetWindowMaxSize(cnum(a), cnum(b)));
+  case 315: VOID(SetWindowOpacity(cfloat(a)));
+  case 316: VOID(SetWindowFocused());
+  case 317: return onum(GetRenderWidth(), 1);
+  case 318: return onum(GetRenderHeight(), 1);
+  case 319: return onum(GetCurrentMonitor(), 1);
+  case 320: return vec22list(GetMonitorPosition(cnum(a)));
+  case 321: return onum(GetMonitorRefreshRate(cnum(a)), 1);
+  case 322: return vec22list(GetWindowPosition());
+  case 323: return vec22list(GetWindowScaleDPI());
+  case 324: VOID(EnableEventWaiting());
+  case 325: VOID(DisableEventWaiting());
+  case 326: VOID(BeginScissorMode(cnum(car(a)), cnum(cdr(a)), cnum(car(b)), cnum(cdr(b))));
+  case 327: VOID(EndScissorMode());
 
   /*-- raymath --*/
   case 500: return mkfloat(Clamp(cfloat(a), cfloat(b), cfloat(c)));
