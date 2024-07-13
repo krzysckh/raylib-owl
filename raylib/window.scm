@@ -98,6 +98,14 @@
    begin-scissor-mode
    end-scissor-mode
 
+   swap-screen-buffer
+   poll-input-events
+   wait-time
+   set-random-seed!
+   random-value min
+   random-sequence
+   set-mouse-cursor!
+
    with-camera2d
    with-scissors
    )
@@ -204,6 +212,14 @@
     (define (disable-event-waiting!)      (prim 325))
     (define (begin-scissor-mode x y w h)  (prim 326 (cons x y) (cons w h)))
     (define (end-scissor-mode)            (prim 327))
+    (define (swap-screen-buffer)          (prim 328))
+    (define (poll-input-events)           (prim 329))
+    (define (wait-time t)                 (prim 330 t))
+    (define (set-random-seed! s)          (prim 331 s))
+    (define (random-value min max)        (prim 332 min max))
+    (define (random-sequence N min max)   (prim 333 N min max))
+
+    (define (set-mouse-cursor! c)         (prim 334 c))
 
     (define-syntax with-scissors
       (syntax-rules ()

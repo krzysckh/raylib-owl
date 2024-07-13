@@ -35,6 +35,11 @@
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
                                   cfloat(list_at(t, 2)), cfloat(list_at(t, 3))})
 #define DEREF(T, v) (*(T*)cptr(v))
+#define IMG() malloc(sizeof(Image))
+#define IMGDO(exp) {                            \
+    Image *i = IMG();                           \
+    *i = exp;                                   \
+    return PTR(i); }
 
 #define rl_not_implemented(f) \
   fprintf(stderr, "not-implemented %s (opcode %d)\n", #f, op);   \
@@ -576,6 +581,50 @@ prim_custom(int op, word a, word b, word c)
   case 325: VOID(DisableEventWaiting());
   case 326: VOID(BeginScissorMode(cnum(car(a)), cnum(cdr(a)), cnum(car(b)), cnum(cdr(b))));
   case 327: VOID(EndScissorMode());
+  case 328: VOID(SwapScreenBuffer());
+  case 329: VOID(PollInputEvents());
+  case 330: VOID(WaitTime(cnum(a)));
+  case 331: VOID(SetRandomSeed(cnum(a)));
+  case 332: return onum(GetRandomValue(cnum(a), cnum(b)), 1);
+  case 333: {
+    word l = INULL;
+    uint n = cnum(a);
+    int *vs = LoadRandomSequence(n, cnum(b), cnum(c));
+    while (n--)
+      l = cons(onum(vs[n-1], 1), l);
+
+    UnloadRandomSequence(vs);
+    return l;
+  }
+  case 334: VOID(SetMouseCursor(cnum(a)));
+  case 335: IMGDO(GenImageColor(cnum(a), cnum(b), v2color(c)));
+  case 336: IMGDO(GenImageGradientLinear(cnum(car(a)), cnum(cdr(b)),
+                                         cnum(b), v2color(car(c)),
+                                         v2color(cdr(c))));
+  case 337: IMGDO(GenImageGradientRadial(cnum(car(a)), cnum(cdr(a)),
+                    cfloat(b), v2color(car(c)), v2color(cdr(c))));
+  case 338: IMGDO(GenImageGradientSquare(cnum(car(a)), cnum(cdr(a)),
+                    cfloat(b), v2color(car(c)), v2color(cdr(c))));
+  case 339: IMGDO(GenImageChecked(cnum(car(a)), cnum(cdr(a)),
+                    cnum(car(b)), cnum(cdr(b)), v2color(car(c)),
+                    v2color(cdr(c))));
+  case 340: {
+    Image *i = IMG();
+    uint N;
+    i->format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+    i->width = cnum(a);
+    i->height = cnum(b);
+    i->data = bvlst2ptr(c, &N);
+    i->mipmaps = 1;
+
+    if ((int)N != i->width*i->height*4) {
+      free(i->data);
+      TraceLog(LOG_ERROR, "invalid data for prim 340");
+      return IFALSE;
+    }
+
+    return PTR(i);
+  }
 
   /*-- raymath --*/
   case 500: return mkfloat(Clamp(cfloat(a), cfloat(b), cfloat(c)));
