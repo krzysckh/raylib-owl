@@ -14,6 +14,7 @@
    (raylib audio)
    (raylib const)
    (raylib raymath)
+   (raylib image)
    )
 
   (export
@@ -31,6 +32,7 @@
    (exports (raylib audio))
    (exports (raylib const))
    (exports (raylib raymath))
+   (exports (raylib image))
    )
 
   (begin

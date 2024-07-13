@@ -20,6 +20,7 @@
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}
+#define SELF(s, exp) {exp; return s;}
 #define list2vec2(t) ((Vector2){cfloat(car(t)), cfloat(cadr(t))})
 #define list2vec3(t) ((Vector3){cfloat(car(t)), cfloat(cadr(t)), cfloat(caddr(t))})
 #define list2vec list2vec2
@@ -625,6 +626,29 @@ prim_custom(int op, word a, word b, word c)
 
     return PTR(i);
   }
+
+  case 341: SELF(a, ImageFormat(cptr(a), cnum(b)));
+  case 342: SELF(a, ImageToPOT(cptr(a), v2color(b)));
+  case 343: SELF(a, ImageAlphaCrop(cptr(a), cfloat(b)));
+  case 344: SELF(a, ImageAlphaClear(cptr(a), v2color(b), cfloat(c)));
+  case 345: SELF(a, ImageAlphaMask(cptr(a), DEREF(Image, b)));
+  case 346: SELF(a, ImageAlphaPremultiply(cptr(a)));
+  case 347: SELF(a, ImageBlurGaussian(cptr(a), cnum(b)));
+  case 348: SELF(a, ImageResize(cptr(a), cnum(b), cnum(c)));
+  case 349: SELF(a, ImageResizeNN(cptr(a), cnum(b), cnum(c)));
+  case 350: SELF(a, ImageMipmaps(cptr(a)));
+  case 351: SELF(a, ImageDither(cptr(a), cnum(car(b)), cnum(cdr(b)), cnum(car(c)), cnum(cdr(c))));
+  case 352: SELF(a, ImageFlipVertical(cptr(a)));
+  case 353: SELF(a, ImageFlipHorizontal(cptr(a)));
+  case 354: SELF(a, ImageRotate(cptr(a), cnum(b)));
+  case 355: SELF(a, ImageRotateCW(cptr(a)));
+  case 356: SELF(a, ImageRotateCCW(cptr(a)));
+  case 357: SELF(a, ImageColorTint(cptr(a), v2color(b)));
+  case 358: SELF(a, ImageColorInvert(cptr(a)));
+  case 359: SELF(a, ImageColorGrayscale(cptr(a)));
+  case 360: SELF(a, ImageColorContrast(cptr(a), cfloat(b)));
+  case 361: SELF(a, ImageColorBrightness(cptr(a), cnum(b)));
+  case 362: SELF(a, ImageColorReplace(cptr(a), v2color(b), v2color(c)));
 
   /*-- raymath --*/
   case 500: return mkfloat(Clamp(cfloat(a), cfloat(b), cfloat(c)));
