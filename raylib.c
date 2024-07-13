@@ -31,6 +31,11 @@
 #define vec22list(v) cons(onum(v.x, 1), cons(onum(v.y, 1), INULL));
 #define Vec22listH(fcall) { vec2 V = (fcall); return vec22list(V); }
 #define with_data(ob, exp) {uint N; void *data = bvlst2ptr(ob, &N); exp;}
+#define color2lst(c)                                                    \
+  cons(onum(c.r, 1),                                                    \
+       cons(onum(c.g, 1),                                               \
+            cons(onum(c.b, 1),                                          \
+                 cons(onum(c.a, 1), INULL)))) /* stairway to heaven */
 
 #define list_ref list_at
 #define list2rect(t) ((Rectangle){cfloat(list_at(t, 0)), cfloat(list_at(t, 1)), \
@@ -592,7 +597,7 @@ prim_custom(int op, word a, word b, word c)
     uint n = cnum(a);
     int *vs = LoadRandomSequence(n, cnum(b), cnum(c));
     while (n--)
-      l = cons(onum(vs[n-1], 1), l);
+      l = cons(onum(vs[n], 1), l);
 
     UnloadRandomSequence(vs);
     return l;
@@ -649,6 +654,29 @@ prim_custom(int op, word a, word b, word c)
   case 360: SELF(a, ImageColorContrast(cptr(a), cfloat(b)));
   case 361: SELF(a, ImageColorBrightness(cptr(a), cnum(b)));
   case 362: SELF(a, ImageColorReplace(cptr(a), v2color(b), v2color(c)));
+  case 363: {
+    word l = INULL;
+    Image i = DEREF(Image, a);
+    Color *c = LoadImageColors(i);
+    int n = i.width * i.height;
+    while (n--)
+      l = cons(color2lst(c[n]), l);
+
+    UnloadImageColors(c);
+
+    return l;
+  };
+  case 364: {
+    int n;
+    word l = INULL;
+    Color *c = LoadImagePalette(DEREF(Image, a), cnum(b), &n);
+    while (n--)
+      l = cons(color2lst(c[n]), l);
+
+    UnloadImagePalette(c);
+
+    return l;
+  };
 
   /*-- raymath --*/
   case 500: return mkfloat(Clamp(cfloat(a), cfloat(b), cfloat(c)));

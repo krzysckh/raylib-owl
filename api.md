@@ -310,8 +310,8 @@
 * [x] void ImageColorBrightness(Image *image, int brightness);
 * [x] void ImageColorReplace(Image *image, Color color, Color replace);
 * [ ] void ImageResizeCanvas(Image *image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill);
-* [ ] Color *LoadImageColors(Image image);
-* [ ] Color *LoadImagePalette(Image image, int maxPaletteSize, int *colorCount);
+* [x] Color *LoadImageColors(Image image);
+* [x] Color *LoadImagePalette(Image image, int maxPaletteSize, int *colorCount);
 * [ ] void UnloadImageColors(Color *colors);
 * [ ] void UnloadImagePalette(Color *colors);
 * [ ] Rectangle GetImageAlphaBorder(Image image, float threshold);

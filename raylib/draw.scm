@@ -2,6 +2,7 @@
   (import
    (owl toplevel)
    (owl core)
+   (only (raylib const) white)
    (raylib common))
 
   (export
@@ -33,6 +34,7 @@
    draw-poly
 
    draw-texture
+   draw-texture-ex
    draw-texture-pro
    draw-texture-rec
 
@@ -140,9 +142,12 @@
 
     (define draw-texture
       (case-lambda
-       ((t x y tint) (prim 254 t (list x y) tint))                       ;; DrawTexture
-       ((t pos tint) (prim 254 t pos tint))                              ;; DrawTextureV
-       ((t pos rot scale tint) (prim 255 t pos (list rot scale tint))))) ;; DrawTextureEx
+       ((t x y tint) (prim 254 t (list x y) tint))
+       ((t pos tint) (prim 254 t pos tint))
+       ((t pos)      (prim 254 t pos white))))
+
+    (define (draw-texture-ex t pos rot scale tint)
+      (prim 255 t pos (list rot scale tint))) ;; DrawTextureEx
 
     (define (draw-texture-pro t source-rect dest-rect origin rot tint)
       (prim 257 t (list source-rect dest-rect) (list origin rot tint)))

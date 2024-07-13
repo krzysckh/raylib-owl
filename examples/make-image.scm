@@ -1,5 +1,6 @@
 (import
  (owl toplevel)
+ (owl proof)
  (raylib))
 
 (define (f x y) (band x y))
@@ -12,14 +13,20 @@
               (loop (+ x 1) y (append acc (if (= (f x y) 0) '(0 0 0 255) '(255 255 255 255))))))))
 
 (lambda (args)
+  (set-memory-limit (<< 2 16))
   (with-window
    400 400 "make-image example"
    (let* ((bv (list->bytevector l))
-          (t (image->texture (image-color-replace (image-color-invert (make-image 50 50 bv)) white red))))
+          (i (image-color-replace (image-color-invert (make-image 50 50 bv)) white red))
+          (t (image->texture i)))
+
+     (example (len (image->list-palette i 10)) = 2)
+     (example (len (image->list i)) = (* 50 50))
+
      (with-mainloop
       (draw
        (clear-background red)
-       (sys-prim 255 t '(0 0) (list 0 5 white))))))) ;; TODO: case-lambda-too-large on draw-texture
+       (draw-texture-ex t '(0 0) 0 5 white))))))
 
 ;; Local Variables:
 ;; mode: scheme

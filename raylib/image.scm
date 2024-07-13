@@ -34,6 +34,11 @@
    gen-image-checked
    bytevector->image
    make-image
+
+   image->list
+   image->list-palette
+   image-colors
+   image-palette
    )
 
   (begin
@@ -74,4 +79,14 @@
     (define (bytevector->image w h bv)
       (prim 340 w h bv))
     (define make-image bytevector->image)
+
+    ;; image → list of colors
+    ;; this returns a big list. you probably should set-memory-limit to something higher.
+    ;; it allocates a new list for every colour
+    ;; TODO: there are probably less colors than width*height, point to already allocated colors
+    ;;       for colors that repeat
+    (define (image->list i) (prim 363 i))
+    (define (image->list-palette i maxp) (prim 364 i maxp))
+    (define image-colors image->list)
+    (define image-palette image->list-palette)
     ))
