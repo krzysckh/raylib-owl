@@ -15,7 +15,7 @@
   (with-window
    400 400 "make-image example"
    (let* ((bv (list->bytevector l))
-          (t (image->texture (img-color-replace (img-color-invert (make-image 50 50 bv)) white red))))
+          (t (image->texture (image-color-replace (image-color-invert (make-image 50 50 bv)) white red))))
      (with-mainloop
       (draw
        (clear-background red)

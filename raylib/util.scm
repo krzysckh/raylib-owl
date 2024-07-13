@@ -16,14 +16,6 @@
    collision-point-triangle?
 
    truncate-precision
-
-   image-color
-   image-gradient-linear
-   image-gradient-radial
-   image-gradient-square
-   image-checked
-   bytevector->image
-   make-image
    )
 
   (begin
@@ -48,20 +40,4 @@
              (a1 b1 (if (negative? trunc) (values l 0) (truncate/ l (expt 10 trunc))))
              (a2 b2 (if (negative? trunc) (values m 0) (truncate/ m (expt 10 trunc)))))
             (/ a1 a2)))
-
-    (define (image-color w h c) (prim 335 w h c))
-    (define (image-gradient-linear w h dir start end)
-      (prim 336 (cons w h) dir (cons start end)))
-    (define (image-gradient-radial w h density inner outer)
-      (prim 337 (cons w h) density (cons inner outer)))
-    (define (image-gradient-square w h density inner outer)
-      (prim 338 (cons w h) density (cons inner outer)))
-    (define (image-checked w h cx cy c1 c2)
-      (prim 339 (cons w h) (cons cx cy) (cons c1 c2)))
-
-    ;; bv in format R8G8B8A8
-    (define (bytevector->image w h bv)
-      (prim 340 w h bv))
-    (define make-image bytevector->image)
-
     ))
