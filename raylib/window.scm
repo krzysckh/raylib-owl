@@ -102,7 +102,7 @@
    poll-input-events
    wait-time
    set-random-seed!
-   random-value min
+   random-value
    random-sequence
    set-mouse-cursor!
 
