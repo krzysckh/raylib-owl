@@ -25,9 +25,10 @@ jobs:
       - name: build ol-rl.exe
         shell: bash
         run: |
-          make clean ol-rl
-          make clean ol-rl.exe
           mkdir build
+          make clean ol-rl
+          cp /tmp/owl/c/ol.c build/ol-rl.c
+          make clean ol-rl.exe
           mv ol-rl build/
           mv ol-rl.exe build/
       - name: Upload as artifact
