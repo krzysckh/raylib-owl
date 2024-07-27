@@ -32,7 +32,7 @@
    gen-image-gradient-radial
    gen-image-gradient-square
    gen-image-checked
-   bytevector->image
+   raw-bytevector->image
    make-image
 
    image->list
@@ -76,9 +76,9 @@
       (prim 339 (cons w h) (cons cx cy) (cons c1 c2)))
 
     ;; bv in format R8G8B8A8
-    (define (bytevector->image w h bv)
+    (define (raw-bytevector->image w h bv)
       (prim 340 w h bv))
-    (define make-image bytevector->image)
+    (define make-image raw-bytevector->image)
 
     ;; image → list of colors
     ;; this returns a big list. you probably should set-memory-limit to something higher.

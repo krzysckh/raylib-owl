@@ -73,7 +73,7 @@ ol-rl.exe: libraylib5-winlegacy.a ovm-win.c
 
 docs: raylib-owl.html raylib.scm raylib/*.scm
 raylib-owl.md: $(FEATHER)
-	$(FEATHER) -o raylib-owl.md --title "(raylib)" \
+	$(FEATHER) -s -o raylib-owl.md --title "(raylib)" \
 		README.md `find . -type f -iname '*.scm' | grep -v test`
 raylib-owl.html: raylib-owl.md
 	pandoc --toc -s -f gfm -t html raylib-owl.md -o raylib-owl.html
