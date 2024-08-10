@@ -87,9 +87,9 @@ install:
 	cp -v ol-rl $(PREFIX)/bin
 uninstall:
 	rm -vf $(PREFIX)/bin/ol-rl
-pubcpy: ol-rl.exe test-win.exe docs
+pubcpy: ol-rl.exe docs
 	yes | pubcpy raylib-owl.html
 	yes | pubcpy ol-rl.exe
-	yes | pubcpy test-win.exe
+	# yes | pubcpy test-win.exe
 pubcpy-docs: docs
 	yes | pubcpy raylib-owl.html

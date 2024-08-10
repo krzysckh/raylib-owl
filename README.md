@@ -25,20 +25,32 @@ and link them together.
 raylib `sys-prim`s, so it will be then used to interpret and/or
 compile Owl lisp programs that depend on raylib.
 
-```console
+```sh
 $ make ol-rl
 # make install
 ```
 
 ## compiling stuff
 
-```console
+* unix
+```sh
 $ ol-rl -o test.c test.scm
 $ cc test.c -lraylib -lm -o test
 $ ./test
 ```
+* unix targetting windows
+```sh
+$ wget https://pub.krzysckh.org/ol-rl.exe
+$ wget https://pub.krzysckh.org/libraylib5-winlegacy.a
+$ wine ol-rl.exe -o test-w32.c test.scm
+$ i686-w64-mingw32-gcc -static -o test.exe -I/usr/local/include test-w32.c -L. -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32
+```
 
-## windows
+* windows targetting windows
+
+  you're on your own. good luck.
+
+## usage on ms windows
 
 If you're on windows, you can download the pre-compiled `ol-rl.exe` binary
 [here](https://pub.krzysckh.org/ol-rl.exe). If running it as a REPL, remember
@@ -48,13 +60,13 @@ to use `--no-readline`.
 
 - compile raylib targetting web, or use [this](https://pub.krzysckh.org/libraylib5-web.a)
   pre-compiled binary
-```console
+```sh
 $ git clone https://github.com/raysan5/raylib
 $ cd raylib/src
 $ make clean all PLATFORM=PLATFORM_WEB
 ```
 - compile your code for web
-```
+```sh
 $ ol-rl -o test.c test.scm
 $ emcc -DPLATFORM_WEB -I/usr/local/include test.c /path/to/libraylib-web.a -o test.html -s USE_GLFW=3 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ALLOW_MEMORY_GROWTH=1 -s ASYNCIFY -s ASSERTIONS=0
 ```
