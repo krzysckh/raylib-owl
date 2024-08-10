@@ -152,8 +152,8 @@ prim_custom(int op, word a, word b, word c)
   case 122: return onum(GetMonitorHeight(cnum(a)), 1);
   case 123: return onum(GetMonitorPhysicalWidth(cnum(a)), 1);
   case 124: return onum(GetMonitorPhysicalHeight(cnum(a)), 1);
-  case 125: return mkstring((char*)GetMonitorName(cnum(a)));
-  case 126: return mkstring((char*)GetClipboardText());
+  case 125: return mkstring((void*)GetMonitorName(cnum(a)));
+  case 126: return mkstring((void*)GetClipboardText());
   case 127: VOID(SetClipboardText((char*)a+W));
   case 128: VOID(ShowCursor());
   case 129: VOID(HideCursor());
@@ -217,7 +217,7 @@ prim_custom(int op, word a, word b, word c)
     word lst = INULL;
     uint i;
     for (i = 0; i < fpl.count; ++i)
-      lst = cons(mkstring(fpl.paths[i]), lst);
+      lst = cons(mkstring((void*)fpl.paths[i]), lst);
 
     UnloadDroppedFiles(fpl);
     return lst;
@@ -230,7 +230,7 @@ prim_custom(int op, word a, word b, word c)
   case 169: if (cnum(a)) return onum(GetKeyPressed(), 1); else return onum(GetCharPressed(), 1);
   case 170: VOID(SetExitKey(cnum(a)));
   case 171: return BOOL(IsGamepadAvailable(cnum(a)));
-  case 172: return mkstring((char*)GetGamepadName(cnum(a)));
+  case 172: return mkstring((void*)GetGamepadName(cnum(a)));
   case 173: return BOOL(IsGamepadButtonPressed(cnum(a), cnum(b)));
   case 174: return BOOL(IsGamepadButtonDown(cnum(a), cnum(b)));
   case 175: return BOOL(IsGamepadButtonReleased(cnum(a), cnum(b)));
