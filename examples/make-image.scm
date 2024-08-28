@@ -12,8 +12,18 @@
              (else
               (loop (+ x 1) y (append acc (if (= (f x y) 0) '(0 0 0 255) '(255 255 255 255))))))))
 
+(define texture-filters
+  (vector
+   (cons 'point           texture-filter-point)
+   (cons 'bilinear        texture-filter-bilinear)
+   (cons 'trilinear       texture-filter-trilinear)
+   (cons 'anisotropic-4x  texture-filter-anisotropic-4x)
+   (cons 'anisotropic-8x  texture-filter-anisotropic-8x)
+   (cons 'anisotropic-16x texture-filter-anisotropic-16x)))
+
 (lambda (args)
   (set-memory-limit (<< 2 16))
+  (set-target-fps! 30)
   (with-window
    400 400 "make-image example"
    (let* ((bv (list->bytevector l))
@@ -23,10 +33,22 @@
      (example (len (image->list-palette i 10)) = 2)
      (example (len (image->list i)) = (* 50 50))
 
-     (with-mainloop
-      (draw
-       (clear-background red)
-       (draw-texture-ex t '(0 0) 0 5 white))))))
+     (set-window-state! flag-window-resizable)
+     (let loop ((cur -1))
+       (draw
+        (clear-background red)
+        (draw-texture-pro t '(0 0 50 50) (list 0 0 (window-width) (window-height)) '(0 0) 0 white)
+        (when (>= cur 0)
+          (draw-text-simple (str (car (vector-ref texture-filters cur))) '(0 0) 36 white)))
+       (cond
+        ((key-pressed? key-space)
+         (let ((cur (modulo (+ cur 1) (vector-length texture-filters))))
+           (set-texture-filter! t (cdr (vector-ref texture-filters cur)))
+           (loop cur)))
+        ((window-should-close?) 0)
+        (else
+         (loop cur)))))))
+
 
 ;; Local Variables:
 ;; mode: scheme
