@@ -1,3 +1,7 @@
+;; this test thing is undocumented and you should probably not be
+;; running it it references things in my home directory as it helped
+;; me catch bugs which should be resolved by now
+
 (import
  (owl toplevel)
  (owl lazy)

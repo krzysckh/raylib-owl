@@ -19,3 +19,5 @@ ol-rt*
 examples/*.c
 TAGS
 *.pl
+ovm-rl.c
+ovm-rl

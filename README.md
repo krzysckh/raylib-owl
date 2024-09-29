@@ -26,7 +26,7 @@ raylib `sys-prim`s, so it will be then used to interpret and/or
 compile Owl lisp programs that depend on raylib.
 
 ```sh
-$ make ol-rl
+$ make all
 # make install
 ```
 

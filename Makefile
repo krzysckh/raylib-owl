@@ -1,5 +1,5 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
-OWL_REVISION=f274b49b4bfe6b43b75960dee937ca4f4dc1fa44
+OWL_REVISION=64197e431877a2c337eb96429594b3e43d9a4277
 
 CFLAGS_COMMON=-g -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
 CFLAGS=$(CFLAGS_COMMON)
@@ -26,15 +26,17 @@ FEATHER=/tmp/feather
 
 .PHONY: docs pubcpy make-owl patch-owl
 
+all: ol-rl ovm-rl
 $(OWL_TEMP_SOURCE_PATH):
 	git clone https://gitlab.com/owl-lisp/owl $(OWL_TEMP_SOURCE_PATH)
 	cd $(OWL_TEMP_SOURCE_PATH) && git checkout $(OWL_REVISION)
+$(OWL_TEMP_SOURCE_PATH)/bin/ol: $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl
 $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl: ol-rt.c
 	$(MAKE) patch-owl
 	$(MAKE) -C $(OWL_TEMP_SOURCE_PATH) CC=$(CC)
 patch-owl:
 	$(SED) -i.bak 's!"c/_vm\.c"!"$(PWD)/ol-rt.c"!' $(OWL_TEMP_SOURCE_PATH)/owl/compile.scm
-	$(SED) -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm
+	$(SED) -i.bak 's!'"'"'("\.")!'"'"'("$(PWD)" ".")! ; s/(define \*features\*/(import (raylib))\n(define *features*/' $(OWL_TEMP_SOURCE_PATH)/owl/ol.scm #
 	$(SED) -i.bak -e 's!bin/olp $$?!bin/olp -g -DPRIM_CUSTOM $$? -I/usr/local/include $(LDFLAGS)!' \
 		-e 's!tests/\*\.scm tests/\*\.sh!!' \
 		$(OWL_TEMP_SOURCE_PATH)/Makefile
@@ -47,8 +49,12 @@ ol-rt.c: raylib.c $(OWL_TEMP_SOURCE_PATH)
 ol-rt-win.c: raylib.c ovm-win.c
 	echo '#define PRIM_CUSTOM' > /tmp/_prim.c
 	grep -v "ovm\.h" raylib.c | cat /tmp/_prim.c ovm-win.c - > ol-rt-win.c
-ol-rl: $(OWL_TEMP_SOURCE_PATH)/fasl/ol.fasl
+ol-rl: $(OWL_TEMP_SOURCE_PATH)/bin/ol
 	cp -v $(OWL_TEMP_SOURCE_PATH)/bin/ol ol-rl
+ovm-rl.c: ol-rt.c
+	echo "void *heap = 0;" | cat - ol-rt.c > ovm-rl.c
+ovm-rl: ovm-rl.c
+	$(CC) $(CFLAGS) ovm-rl.c $(LDFLAGS) -o ovm-rl
 test: test.c
 	$(CC) $(CFLAGS) test.c $(LDFLAGS) -lraylib -lm -o test
 test.c: test.scm ol-rl
@@ -85,6 +91,7 @@ clean:
 		$(OWL_TEMP_SOURCE_PATH)
 install:
 	cp -v ol-rl $(PREFIX)/bin
+	cp -v ovm-rl $(PREFIX)/bin
 uninstall:
 	rm -vf $(PREFIX)/bin/ol-rl
 pubcpy: ol-rl.exe docs
