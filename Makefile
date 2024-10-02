@@ -1,5 +1,5 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
-OWL_REVISION=64197e431877a2c337eb96429594b3e43d9a4277
+OWL_REVISION=b1c909a412ad155af1691c499daac01125b71c2f
 
 CFLAGS_COMMON=-g -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
 CFLAGS=$(CFLAGS_COMMON)
@@ -40,15 +40,16 @@ patch-owl:
 	$(SED) -i.bak -e 's!bin/olp $$?!bin/olp -g -DPRIM_CUSTOM $$? -I/usr/local/include $(LDFLAGS)!' \
 		-e 's!tests/\*\.scm tests/\*\.sh!!' \
 		$(OWL_TEMP_SOURCE_PATH)/Makefile
-	cd $(OWL_TEMP_SOURCE_PATH) && rm tests/*
+	cd $(OWL_TEMP_SOURCE_PATH) && rm -r tests/*
 	echo "echo no tests" > $(OWL_TEMP_SOURCE_PATH)/tests/run
 	chmod +x $(OWL_TEMP_SOURCE_PATH)/tests/run
-ol-rt.c: raylib.c $(OWL_TEMP_SOURCE_PATH)
+/tmp/_prim.c:
 	echo '#define PRIM_CUSTOM' > /tmp/_prim.c
-	grep -v "ovm\.h" raylib.c | cat /tmp/_prim.c $(OWL_TEMP_SOURCE_PATH)/c/ovm.h - $(OWL_TEMP_SOURCE_PATH)/c/ovm.c > ol-rt.c
-ol-rt-win.c: raylib.c ovm-win.c
-	echo '#define PRIM_CUSTOM' > /tmp/_prim.c
-	grep -v "ovm\.h" raylib.c | cat /tmp/_prim.c ovm-win.c - > ol-rt-win.c
+	echo '#define PRIM_FP_API' >> /tmp/_prim.c
+ol-rt.c: /tmp/_prim.c raylib.c $(OWL_TEMP_SOURCE_PATH)
+	grep -v "fp_api\.c" raylib.c | cat /tmp/_prim.c $(OWL_TEMP_SOURCE_PATH)/c/ovm.h $(OWL_TEMP_SOURCE_PATH)/c/fp_api.c - $(OWL_TEMP_SOURCE_PATH)/c/ovm.c | grep -v "ovm\.h" > ol-rt.c
+ol-rt-win.c: /tmp/_prim.c raylib.c ovm-win.c
+	grep -v "ovm.h" raylib.c | cat /tmp/_prim.c ovm-win.c - > ol-rt-win.c
 ol-rl: $(OWL_TEMP_SOURCE_PATH)/bin/ol
 	cp -v $(OWL_TEMP_SOURCE_PATH)/bin/ol ol-rl
 ovm-rl.c: ol-rt.c

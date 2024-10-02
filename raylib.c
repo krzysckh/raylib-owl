@@ -1,3 +1,5 @@
+#define PRIM_FP_API
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,10 +15,8 @@
 
 #include "ovm.h"
 
-#define cfloat(x)                                       \
-  (is_type(x,TRAT)?((float)cnum(x)/(float)cnum(x+W))    \
-   : ((is_type(x,TNUM)||is_type(x,TNUMN))?(cnum((x)))   \
-      : ((float)(cnum(car(x)))/(float)cnum(cdr(x)))))
+#define cfloat(x) (float)cdouble(x)
+#define mkfloat(x) mkrat_approx(x)
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}
@@ -719,3 +719,5 @@ prim_custom(int op, word a, word b, word c)
 
   return IFALSE;
 }
+
+#undef PRIM_FP_API // shits fucked
