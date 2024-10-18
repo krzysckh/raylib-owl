@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build:
-    runs-on: debian:bookworm
+    runs-on: ubuntu-20.04
     steps:
       - name: install deps
         shell: bash
