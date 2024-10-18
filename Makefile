@@ -1,5 +1,5 @@
 OWL_TEMP_SOURCE_PATH=/tmp/owl
-OWL_REVISION=b1c909a412ad155af1691c499daac01125b71c2f
+OWL_REVISION=fd6de3806d607f35edcdf6880348c34be20a8c39
 
 CFLAGS_COMMON=-g -DPRIM_CUSTOM -I/usr/local/include -I$(OWL_TEMP_SOURCE_PATH)/c
 CFLAGS=$(CFLAGS_COMMON)
@@ -90,12 +90,15 @@ $(FEATHER):
 clean:
 	rm -fr test test.c test-win.c *.html raylib-owl.md ol-rt.c \
 		$(OWL_TEMP_SOURCE_PATH)
+full-clean: clean
+	rm -fr ol-rl ol-rl.exe ol-rl-`$(CC) -dumpmachine`
 install:
 	cp -v ol-rl $(PREFIX)/bin
 	cp -v ovm-rl $(PREFIX)/bin
 uninstall:
 	rm -vf $(PREFIX)/bin/ol-rl
-pubcpy: ol-rl.exe docs
+pubcpy: ol-rl.exe ol-rl docs
+	cp ol-rl ol-rl-`$(CC) -dumpmachine` && yes | pubcpy ol-rl-`$(CC) -dumpmachine`
 	yes | pubcpy raylib-owl.html
 	yes | pubcpy ol-rl.exe
 	# yes | pubcpy test-win.exe
