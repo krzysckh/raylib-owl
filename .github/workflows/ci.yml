@@ -3,26 +3,26 @@ on: push
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/krzysckh/raylib-owl-build-minimal:latest
-      credentials:
-        username: krzysckh
-        password: ${{ secrets.GHCR_KEY }}
+    runs-on: ubuntu-22.04
     steps:
+      - name: install deps
+        shell: bash
+        run: |
+          sudo apt update -y
+          sudo apt install -y gcc mingw-w64-i686-dev mingw-w64-x86-64-dev curl make wget sed git gcc-mingw-w64-i686-win32 gcc-mingw-w64-x86-64-win32
       - name: build raylib
         shell: bash
         run: |
-          apt install -y libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+          sudo apt install -y libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
           git clone https://github.com/raysan5/raylib
           cd raylib
           git checkout f1007554a0a8145060797c0aa8169bdaf2c1c6b8
           cd src
           make -j
-          make install
+          sudo make install
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: build ol-rl.exe
+      - name: build raylib-owl
         shell: bash
         run: |
           mkdir build
