@@ -19,7 +19,7 @@ jobs:
           git checkout f1007554a0a8145060797c0aa8169bdaf2c1c6b8
           cd src
           make -j
-          make install
+          sudo make install
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: build raylib-owl
