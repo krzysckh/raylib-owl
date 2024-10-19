@@ -48,11 +48,11 @@ $ i686-w64-mingw32-gcc -static -o test.exe -I/usr/local/include test-w32.c -L. -
 
 * windows targetting windows (the easy way)
 
-Pre-compiled `libraylib5-winlegacy.a` and `ol-rl.exe` are targetted at 32-bit systems.
-They will run just fine on 64-bit MS windows, but you should keep the 32-bitness in mind.
+    Pre-compiled `libraylib5-winlegacy.a` and `ol-rl.exe` are targetted at 32-bit systems.
+    They will run just fine on 64-bit MS windows, but you should keep the 32-bitness in mind.
 
-- download **x86** w64devkit from [https://github.com/skeeto/w64devkit/releases/tag/v2.0.0](here)
-- launch `w64devkit.exe` and do the following:
+    - download **x86** w64devkit from [https://github.com/skeeto/w64devkit/releases/tag/v2.0.0](here)
+    - launch `w64devkit.exe` and do the following:
 ```sh
 $ wget https://pub.krzysckh.org/ol-rl.exe
 $ wget https://pub.krzysckh.org/libraylib5-winlegacy.a
