@@ -46,9 +46,21 @@ $ wine ol-rl.exe -o test-w32.c test.scm
 $ i686-w64-mingw32-gcc -static -o test.exe -I/usr/local/include test-w32.c -L. -l:libraylib5-winlegacy.a -lm -lopengl32 -lwinmm -lgdi32 -lws2_32
 ```
 
-* windows targetting windows
+* windows targetting windows (the easy way)
 
-  you're on your own. good luck.
+Pre-compiled `libraylib5-winlegacy.a` and `ol-rl.exe` are targetted at 32-bit systems.
+They will run just fine on 64-bit MS windows, but you should keep the 32-bitness in mind.
+
+- download **x86** w64devkit from [https://github.com/skeeto/w64devkit/releases/tag/v2.0.0](here)
+- launch `w64devkit.exe` and do the following:
+```sh
+$ wget https://pub.krzysckh.org/ol-rl.exe
+$ wget https://pub.krzysckh.org/libraylib5-winlegacy.a
+$ git clone https://github.com/raysan5/raylib
+$ ol-rl.exe -o filename.c filename.scm
+$ i686-w64-mingw32-gcc -static -o filename.exe -Iraylib/src filename.c -L. -lraylib5-winlegacy -lm -lopengl32 -lwinmm -lgdi32 -lws2_32
+# if you don't want the console to appear when filename.exe is launched, append -mwindows to the last command
+```
 
 ## usage on ms windows
 
