@@ -16,7 +16,27 @@
 #include "ovm.h"
 
 #define cfloat(x) (float)cdouble(x)
+
+/* a quick and dirty bandade fix until i figure out why my code is failing spectacularly with mkrat_approx() */
+#ifdef OLRL_USE_MKRAT_APPROX
 #define mkfloat(x) mkrat_approx(x)
+#else
+word mkfloat(float f) {
+   int64_t v = 1, m = f < 0;
+   f = ABS(f);
+
+   if (f >= (float)INT64_MAX)
+      return IFALSE;
+
+   while ((float)(f - (int64_t)f) > 0.0) {
+      f *= 10, v *= 10;
+      if (v < 0) /* v overflew */
+        return IFALSE;
+   }
+
+   return mkrat(m ? -f : f, v);
+}
+#endif
 
 #define v2color(a) (*(Color*)(uint32_t[]){cnum(a)})
 #define VOID(exp) {exp; return ITRUE;}

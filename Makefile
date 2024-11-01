@@ -97,8 +97,9 @@ install:
 	cp -v ovm-rl $(PREFIX)/bin
 uninstall:
 	rm -vf $(PREFIX)/bin/ol-rl
-pubcpy: ol-rl.exe ol-rl docs
+pubcpy: ol-rl.exe ol-rl ovm-rl docs
 	cp ol-rl ol-rl-`$(CC) -dumpmachine` && yes | pubcpy ol-rl-`$(CC) -dumpmachine`
+	cp ovm-rl ovm-rl-`$(CC) -dumpmachine` && yes | pubcpy ovm-rl-`$(CC) -dumpmachine`
 	yes | pubcpy raylib-owl.html
 	yes | pubcpy ol-rl.exe
 	# yes | pubcpy test-win.exe
