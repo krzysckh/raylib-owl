@@ -29,8 +29,8 @@ jobs:
           make clean all
           cp /tmp/owl/c/ol.c build/ol-rl.c
           cp ovm-rl.c build/ovm-rl.c
-          make clean ol-rl.exe
           mv ol-rl build/
+          make full-clean ol-rl.exe
           mv ol-rl.exe build/
       - name: Upload as artifact
         uses: actions/upload-artifact@v3
